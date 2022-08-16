@@ -1,3 +1,5 @@
+#!/bin/bash
+
 write_rom()
 {
     cardNumber="$1"
