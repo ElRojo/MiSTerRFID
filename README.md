@@ -62,7 +62,10 @@ esac
 ```
 
  Note that the roms need to be the *filename* only, without the extension (no .mra). Spaces are important and so are quotations. Take care when adding files this way. 
- :warning: When adding files manually be careful not to move the beginning of the `case` statement from line 13.:warning: Doing so will cause the `rfid_write.sh` file to break. If you *do* need to move the `case` block around, please check the comment in `rfid_write.sh` to move your injection point for creating new games."
+ 
+ :warning: When adding files manually be careful not to move the beginning of the `case` statement from line 13.:warning: 
+ 
+ Doing so will cause the `rfid_write.sh` file to break. If you *do* need to move the `case` block around, please check the comment in `rfid_write.sh` to move your injection point for creating new games."
 
 *This function is set up for _Arcade games only, but can be easily adapted to other cores. I would suggest looking at [illusion-pasure-program](https://github.com/illusion-pasture-program/snesRFID)'s `original rfid_process.sh` file*
 
