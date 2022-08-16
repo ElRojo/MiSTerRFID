@@ -1,7 +1,7 @@
 #!/bin/bash
 
 play() {
-        echo "load_core /media/fat/_Arcade/"$1".mra" > /Users/conner/Desktop/mister.txt  
+        echo "load_core /media/fat/_Arcade/"$1".mra" > /dev/MiSTer_cmd
 }
 
 ha_cmd() {

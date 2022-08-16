@@ -10,8 +10,8 @@ write_rom()
     gameTitle=$(get_title "$runningGame")
 
   rfidFile=rfid_process.sh
-  gsed -i "/$cardNumber/d" "$rfidFile"
-  gsed -i "13i \"$cardNumber\") "play" \"$gameTitle\" ;;" "$rfidFile"
+  sed -i "/$cardNumber/d" "$rfidFile"
+  sed -i "13i \"$cardNumber\") "play" \"$gameTitle\" ;;" "$rfidFile"
 }
 
 write_rom "$1"
