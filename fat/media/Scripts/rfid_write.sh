@@ -11,6 +11,7 @@ write_rom()
 
   rfidFile=rfid_process.sh
   sed -i "/$cardNumber/d" "$rfidFile"
+  # '13i...' is the starting line for the case-statement. Change this if you add code or newlines to rfid_process.sh
   sed -i "13i \"$cardNumber\") "play" \"$gameTitle\" ;;" "$rfidFile"
 }
 
