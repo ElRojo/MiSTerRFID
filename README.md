@@ -1,7 +1,9 @@
 Forked from: [javiwwweb/MisTerRFID](https://github.com/javiwwweb/MisTerRFID)
 Most of the ReadMe below is copy/paste from javiwwweb. I have added some notes for my changes.
 # MisTerRFID
-Enables RFID card launching of games for MiSTer FPGA. Launches games without any menu being display using the MiSTer Game Launcher files (MGL) method. Must use a version of MiSTer from Feb 24, 2022 or after to support this method of launching. *This version allows you to write games to cards without needing to edit the `rfid_process.sh` file.*
+Enables RFID card launching of games for MiSTer FPGA. Launches games without any menu being display using the MiSTer Game Launcher files (MGL) method. Must use a version of MiSTer from Feb 24, 2022 or after to support this method of launching. 
+
+*This version allows you to write games to cards without needing to edit the `rfid_process.sh` file.*
 
 ## Hardware Needed
 - Arduino Nano V3.0 
@@ -51,7 +53,7 @@ As you are gathering numbers from your cards or RFID tags, choose an RFID device
 ```
 
 ## MiSTer Setup
-Copy the files to your MiSTer SD card based on the structure of this repo. Edit case statement of the "rfid_process.sh" script. The line-structure is as follows:
+Copy the files to your MiSTer SD card based on the structure of this repo. Edit case statement of the `rfid_process.sh` script. The line-structure is as follows:
 
 ```
 case "$1" in
@@ -60,9 +62,9 @@ esac
 ```
 
  Note that the roms need to be the *filename* only, without the extension (no .mra). Spaces are important and so are quotations. Take care when adding files this way. 
- :warning: When adding files manually be careful not to move the beginning of the `case` statement from line 13. Doing so will cause the `rfid_write.sh` file to break. If you *do* need to move the `case` block around, please check the comment in `rfid_write.sh` to move your injection point for creating new games."
+ :warning: When adding files manually be careful not to move the beginning of the `case` statement from line 13.:warning: Doing so will cause the `rfid_write.sh` file to break. If you *do* need to move the `case` block around, please check the comment in `rfid_write.sh` to move your injection point for creating new games."
 
-> This function is set up for _Arcade games only, but can be easily adapted to other cores. I would suggest looking at [illusion-pasure-program](https://github.com/illusion-pasture-program/snesRFID)'s `original rfid_process.sh` file
+*This function is set up for _Arcade games only, but can be easily adapted to other cores. I would suggest looking at [illusion-pasure-program](https://github.com/illusion-pasture-program/snesRFID)'s `original rfid_process.sh` file*
 
 ## Use
 After editing the rfid_process.sh script, turn off your MiSTer. Plug your Arduino into an available USB port on your USB board module and turn on your MiSTer. Depending on how many scripts you have running, it can take up to 30 seconds from first turning on the power to the RFID reader becoming available. Once the RFID is available, you can start lunching games (if you added cases to the `rfid_process.sh` file), or begin #writing games to cards. 
@@ -72,7 +74,7 @@ Note: This can be combined with MisTer.ini option bootcore= to automatically lau
 ## Assigning Games to Cards
 First, launch a game using the core menu. Once the game has booted, scan your `write card`. This will tell the Arduino that it needs to run the `rfid_write.sh` file on the next card scan. Scan a new (or already assigned) card. The card will be programaticaly added to `rfid_process.sh` and the next time you scan that card, it will boot the game. Remember that you cannot scan the same card twice, though. Scan a different card before scanning the just-written one in order to test it.
 
-> Cards can be overwritten. If you attempt to scan a card that is already added to the `rfid_process.sh` file, the entry will be deleted and then reassigned to the new game. You can do this as often as you'd like. 
+*Cards can be overwritten. If you attempt to scan a card that is already added to the `rfid_process.sh` file, the entry will be deleted and then reassigned to the new game. You can do this as often as you'd like.*
 
 ## Troubleshooting
 - If your cards don't seem to be scanning in MiSTer, make sure that `serial_listen.sh` actually started. I have had issues with that not booting in the past.
