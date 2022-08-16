@@ -22,7 +22,7 @@ Enables RFID card launching of games for MiSTer FPGA. Launches games without any
 
 :warning: Skipping steps below will cause your code to not function! :warning:
 
-Write the misterrfid.ino file to your Arduino. If you find out that that you would like to extend the distance the card is picked up, You can adjust the receiver gain by editing line `21` of the `misterrfid.ino` and upload the code.
+Install the `Easy MFRC522` library through your Arduino IDE. Write the misterrfid.ino file to your Arduino. If you find out that that you would like to extend the distance the card is picked up, You can adjust the receiver gain by editing line `21` of the `misterrfid.ino` and upload the code.
 
 ```
     rfid.PCD_SetRegisterBitMask(rfid.RFCfgReg, (0x03<<4)); // RFID Gain
