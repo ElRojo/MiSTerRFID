@@ -3,10 +3,10 @@
 
 #define SS_PIN 10
 #define RST_PIN 9
- 
+
 MFRC522 rfid(SS_PIN, RST_PIN); // Instance of the class
 
-MFRC522::MIFARE_Key key; 
+MFRC522::MIFARE_Key key;
 
 int codeRead = 0;
 uint32_t cardid = 0;
@@ -14,13 +14,13 @@ int cardBeenRead = 0;
 uint32_t lastCardRead = 0;
 int waitForIt = 0;
 String uidString;
-void setup() {  
+void setup() {
   Serial.begin(9600);
   SPI.begin(); // Init SPI bus
-  rfid.PCD_Init(); // Init MFRC522 
-  pinMode(8,OUTPUT);
-  pinMode(A0,OUTPUT);
-  Serial.println("loaded"); 
+  rfid.PCD_Init(); // Init MFRC522
+  pinMode(8, OUTPUT);
+  pinMode(A0, OUTPUT);
+  Serial.println("loaded");
   pinMode(LED_BUILTIN, OUTPUT);
   digitalWrite(LED_BUILTIN, LOW);
 }
@@ -34,56 +34,56 @@ void loop() {
 
   if (waitForIt >= 9) {
     waitForIt = 0;
-  }  
-  
-  if(  rfid.PICC_IsNewCardPresent())
+  }
+
+  if (  rfid.PICC_IsNewCardPresent())
   {
-      readRFID();
+    readRFID();
   }
   delay(100);
 }
 
-void cardLogic(String proc, uint32_t cardNum){
-      digitalWrite(LED_BUILTIN, HIGH);   // turn the LED on (HIGH is the voltage level)      
-      Serial.print(proc);
-      Serial.println(cardNum);
-      lastCardRead = cardNum;
-      delay(1000);                       // wait for a second
-      digitalWrite(LED_BUILTIN, LOW); 
+void cardLogic(String proc, uint32_t cardNum) {
+  digitalWrite(LED_BUILTIN, HIGH);   // turn the LED on (HIGH is the voltage level)
+  Serial.print(proc);
+  Serial.println(cardNum);
+  lastCardRead = cardNum;
+  delay(1000);                       // wait for a second
+  digitalWrite(LED_BUILTIN, LOW);
 }
 
 void readRFID()
-{  
+{
   const uint32_t wCard = 3817941294;
-  rfid.PICC_ReadCardSerial();  
+  rfid.PICC_ReadCardSerial();
   MFRC522::PICC_Type piccType = rfid.PICC_GetType(rfid.uid.sak);
- 
-  if (piccType != MFRC522::PICC_TYPE_MIFARE_MINI &&  
-    piccType != MFRC522::PICC_TYPE_MIFARE_1K &&
-    piccType != MFRC522::PICC_TYPE_MIFARE_4K) {
+
+  if (piccType != MFRC522::PICC_TYPE_MIFARE_MINI &&
+      piccType != MFRC522::PICC_TYPE_MIFARE_1K &&
+      piccType != MFRC522::PICC_TYPE_MIFARE_4K) {
     //tag is a MIFARE Classic."
     return;
-  }  
-    
-    cardid = rfid.uid.uidByte[0];
-    cardid <<= 8;
-    cardid |= rfid.uid.uidByte[1];
-    cardid <<= 8;
-    cardid |= rfid.uid.uidByte[2];  
-    cardid <<= 8;
-    cardid |= rfid.uid.uidByte[3]; 
+  }
 
-    cardBeenRead = 1;
+  cardid = rfid.uid.uidByte[0];
+  cardid <<= 8;
+  cardid |= rfid.uid.uidByte[1];
+  cardid <<= 8;
+  cardid |= rfid.uid.uidByte[2];
+  cardid <<= 8;
+  cardid |= rfid.uid.uidByte[3];
 
-    if (lastCardRead == wCard && cardid != wCard){
-      cardLogic(". rfid_write.sh ", cardid);
-    }
-    else if (cardid != lastCardRead) {
-   cardLogic(". rfid_process.sh ", cardid);
-    } 
-    
+  cardBeenRead = 1;
 
-    // Halt PICC
+  if (lastCardRead == wCard && cardid != wCard) {
+    cardLogic(". rfid_write.sh ", cardid);
+  }
+  else if (cardid != lastCardRead) {
+    cardLogic(". rfid_process.sh ", cardid);
+  }
+
+
+  // Halt PICC
   rfid.PICC_HaltA();
 
   // Stop encryption on PCD
