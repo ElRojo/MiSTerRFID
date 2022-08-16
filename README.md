@@ -81,7 +81,7 @@ First, launch a game using the core menu. Once the game has booted, scan your `w
 
 ## Troubleshooting
 - If your cards don't seem to be scanning in MiSTer, make sure that `serial_listen.sh` actually started. I have had issues with that not booting in the past.
-- If games aren't being added to the right spot, or being injected in odd places in `rfid_process.sh` make sure you didn't inadvertently move the `case` statement. Read [MiSTer-Setup](#MiSTer Setup). 
+- If games aren't being added to the right spot, or being injected in odd places in `rfid_process.sh` make sure you didn't inadvertently move the `case` statement. Read [MiSTer Setup](#MiSTer-Setup). 
 - If your write card doesn't function. Make sure you added the card number to the Arduino code **and** re-uploaded after making that change.
 
 ### THANK YOU
