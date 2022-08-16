@@ -13,7 +13,6 @@ uint32_t cardid = 0;
 int cardBeenRead = 0;
 uint32_t lastCardRead = 0;
 int waitForIt = 0;
-int wcPres = 0;
 String uidString;
 void setup() {  
   Serial.begin(9600);
@@ -44,12 +43,11 @@ void loop() {
   delay(100);
 }
 
-void cardLogic(String proc, uint32_t cardNum, int wcbool){
+void cardLogic(String proc, uint32_t cardNum){
       digitalWrite(LED_BUILTIN, HIGH);   // turn the LED on (HIGH is the voltage level)      
       Serial.print(proc);
       Serial.println(cardNum);
       lastCardRead = cardNum;
-      wcPres = wcbool;
       delay(1000);                       // wait for a second
       digitalWrite(LED_BUILTIN, LOW); 
 }
@@ -78,10 +76,10 @@ void readRFID()
     cardBeenRead = 1;
 
     if (lastCardRead == wCard && cardid != wCard){
-      cardLogic(". rfid_write.sh ", cardid, 0);
+      cardLogic(". rfid_write.sh ", cardid);
     }
     else if (cardid != lastCardRead) {
-   cardLogic(". rfid_process.sh ", cardid, 0);
+   cardLogic(". rfid_process.sh ", cardid);
     } 
     
 
