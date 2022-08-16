@@ -55,7 +55,7 @@ void cardLogic(String proc, uint32_t cardNum) {
 
 void readRFID()
 {
-  const uint32_t wCard = 3817941294; // Writing Card
+  const uint32_t wCard = 1234567890; // Writing Card
   rfid.PICC_ReadCardSerial();
   MFRC522::PICC_Type piccType = rfid.PICC_GetType(rfid.uid.sak);
 
