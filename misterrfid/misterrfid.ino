@@ -4,7 +4,7 @@
 #define SS_PIN 10
 #define RST_PIN 9
 
-MFRC522 rfid(SS_PIN, RST_PIN); // Instance of the class
+MFRC522 rfid(SS_PIN, RST_PIN);
 
 MFRC522::MIFARE_Key key;
 
@@ -18,9 +18,10 @@ void setup() {
   Serial.begin(9600);
   SPI.begin(); // Init SPI bus
   rfid.PCD_Init(); // Init MFRC522
-  pinMode(8, OUTPUT);
-  pinMode(A0, OUTPUT);
-  Serial.println("loaded");
+  rfid.PCD_SetRegisterBitMask(rfid.RFCfgReg, (0x03<<4)); // RFID Gain
+  pinMode(8,OUTPUT);
+  pinMode(A0,OUTPUT);
+  Serial.println("loaded"); 
   pinMode(LED_BUILTIN, OUTPUT);
   digitalWrite(LED_BUILTIN, LOW);
 }
@@ -44,17 +45,17 @@ void loop() {
 }
 
 void cardLogic(String proc, uint32_t cardNum) {
-  digitalWrite(LED_BUILTIN, HIGH);   // turn the LED on (HIGH is the voltage level)
+  digitalWrite(LED_BUILTIN, HIGH);
   Serial.print(proc);
   Serial.println(cardNum);
   lastCardRead = cardNum;
-  delay(1000);                       // wait for a second
+  delay(1000); 
   digitalWrite(LED_BUILTIN, LOW);
 }
 
 void readRFID()
 {
-  const uint32_t wCard = 3817941294;
+  const uint32_t wCard = 3817941294; // Writing Card
   rfid.PICC_ReadCardSerial();
   MFRC522::PICC_Type piccType = rfid.PICC_GetType(rfid.uid.sak);
 
