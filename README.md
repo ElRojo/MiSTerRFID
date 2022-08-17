@@ -1,6 +1,16 @@
 Forked from: [javiwwweb/MisTerRFID](https://github.com/javiwwweb/MisTerRFID)
 Most of the ReadMe below is copy/paste from javiwwweb. I have added some notes for my changes.
 
+
+# Table of Contents
+- [Hardware Needed](#hardware-needed)
+- [Arduino Hardware Setup](#arduino-hardware-setup)
+- [Write Card Setup](#write-card-setup)
+- [MiSTer Setup](#mister-setup)
+- [Use](#use)
+    - [Assigning Games to Cards](#assigning-games-to-cards)
+- [Known Issues](#known-issues)
+- [Troubleshooting](#troubleshooting)
 # MisTerRFID
 
 Enables RFID card launching of games for MiSTer FPGA. Launches games without any menu being display using the MiSTer Game Launcher files (MGL) method. Must use a version of MiSTer from Feb 24, 2022 or after to support this method of launching.
@@ -86,6 +96,14 @@ Note: This can be combined with MisTer.ini option bootcore= to automatically lau
 First, launch a game using the core menu. Once the game has booted, scan your `write card`. This will tell the Arduino that it needs to run the `rfid_write.sh` file on the next card scan. Scan a new (or already assigned) card. The card will be programaticaly added to `rfid_process.sh` and the next time you scan that card, it will boot the game. Remember that you cannot scan the same card twice, though. Scan a different card before scanning the just-written one in order to test it.
 
 _Cards can be overwritten. If you attempt to scan a card that is already added to the `rfid_process.sh` file, the entry will be deleted and then reassigned to the new game. You can do this as often as you'd like._
+
+## Known Issues
+- Games with two spaces in the name are having one of the spaces removed as the game name is passed through the string manipulation logic. 
+E.g.
+```
+Street Fighter II'  Champion Edition -World 920513- -> Street Fighter II' Champion Edition -World 920513-
+```
+This makes the MiSTer unable to find the rbf file. Some regex will probably fix this. I'll revisit it soon.
 
 ## Troubleshooting
 
