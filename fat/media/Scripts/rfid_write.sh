@@ -7,7 +7,7 @@ write_rom()
     get_title() {   
     trimPath=${1##*".rbf /media/fat/_Arcade/"}
     removeExtra=${trimPath%%.mra*}
-    echo $removeExtra
+    echo "$removeExtra"
     }
     gameTitle=$(get_title "$runningGame")
 
