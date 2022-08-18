@@ -9,8 +9,10 @@ Most of the ReadMe below is copy/paste from javiwwweb. I have added some notes f
 - [MiSTer Setup](#mister-setup)
 - [Use](#use)
     - [Assigning Games to Cards](#assigning-games-to-cards)
+    - [Home Assistant Function](#home-assistant-function)
 - [Known Issues](#known-issues)
 - [Troubleshooting](#troubleshooting)
+
 # MisTerRFID
 
 Enables RFID card launching of games for MiSTer FPGA. Launches games without any menu being display using the MiSTer Game Launcher files (MGL) method. Must use a version of MiSTer from Feb 24, 2022 or after to support this method of launching.
@@ -97,13 +99,49 @@ First, launch a game using the core menu. Once the game has booted, scan your `w
 
 _Cards can be overwritten. If you attempt to scan a card that is already added to the `rfid_process.sh` file, the entry will be deleted and then reassigned to the new game. You can do this as often as you'd like._
 
+## Home Assistant Function
+
+In the `rfid_process.sh`, there's an `ha_cmd` function. It's an _extremely_ simple cUrl command that uses a bearer token and accepts a JSON string. It leverages the [Home Assistant API](https://www.home-assistant.io/integrations/api/). Please refer to the [Home Assistant API Docs](https://developers.home-assistant.io/docs/api/rest/) for detailed information. 
+
+You will need:
+- An API Token
+- API enabled in `configuration.yaml`
+- The URL of your instance + the necessary API action
+
+The quick and dirty version is as follows:
+
+- Log in to Home Assistant as your normal (admin) user
+- Go to settings > Users
+- Create a new user with:   
+  - A name like `LocalApiUser`
+  - A secure password
+  - Toggle the "Can only log in from the local network" to on
+- Log out or open a private window 
+- Log in to Home Assistant as the API User
+- In the bottom left, click on the profile icon
+- Scroll to "Long-Lived Access Tokens" and `Create Token`
+- name the token something memorable, and copy it down. You cannot see it again after closing the window.
+- Paste the token into the `TOKEN` variable in `rfid_process.sh` between the quotes.
+- Create cases using RFID cards that include the request and the `ha_cmd`. Example below:
+
+```
+ha_cmd() {
+        TOKEN="abcdefghijklmnop35920942029034809234ljflkjsalfkj"
+        curl -X POST -H "Authorization: Bearer $TOKEN" -H "Content-Type: application/json" -d $1 $2 
+}
+
+case "$1" in 
+"1234567890") ha_cmd {"entity_id":"light.living_room_lights"}' "http://homeassistant.local:8123/api/services/light/turn_off";;
+esac
+```
+
 ## Known Issues
-~- Games with two spaces in the name are having one of the spaces removed as the game name is passed through the string manipulation logic. 
+~~- Games with two spaces in the name are having one of the spaces removed as the game name is passed through the string manipulation logic. 
 E.g.
 ```
 Street Fighter II'  Champion Edition -World 920513- -> Street Fighter II' Champion Edition -World 920513-
 ```
-This makes the MiSTer unable to find the rbf file. Some regex will probably fix this. I'll revisit it soon.~
+This makes the MiSTer unable to find the rbf file. Some regex will probably fix this. I'll revisit it soon.~~
 
 This seems to be fixed.
 
