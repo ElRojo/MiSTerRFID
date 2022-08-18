@@ -98,12 +98,14 @@ First, launch a game using the core menu. Once the game has booted, scan your `w
 _Cards can be overwritten. If you attempt to scan a card that is already added to the `rfid_process.sh` file, the entry will be deleted and then reassigned to the new game. You can do this as often as you'd like._
 
 ## Known Issues
-- Games with two spaces in the name are having one of the spaces removed as the game name is passed through the string manipulation logic. 
+~- Games with two spaces in the name are having one of the spaces removed as the game name is passed through the string manipulation logic. 
 E.g.
 ```
 Street Fighter II'  Champion Edition -World 920513- -> Street Fighter II' Champion Edition -World 920513-
 ```
-This makes the MiSTer unable to find the rbf file. Some regex will probably fix this. I'll revisit it soon.
+This makes the MiSTer unable to find the rbf file. Some regex will probably fix this. I'll revisit it soon.~
+
+This seems to be fixed.
 
 ## Troubleshooting
 
