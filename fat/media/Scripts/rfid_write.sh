@@ -5,9 +5,7 @@ write_rom()
     cardNumber="$1"
     runningGame=\"$(ps aux | grep .mra)\"
     get_title() {   
-    trimPath=${1##*".rbf /media/fat/_Arcade/"}
-    removeExtra=${trimPath%%.mra*}
-    echo "$removeExtra"
+    echo "$1" | awk -F 'media/fat/_Arcade/' '{print $3}' | awk -F '\\.mra' '{print $1}'
     }
     gameTitle=$(get_title "$runningGame")
 
