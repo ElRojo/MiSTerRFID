@@ -99,8 +99,8 @@ First, launch a game using the core menu. Once the game has booted, scan your `w
 
 _Cards can be overwritten. If you attempt to scan a card that is already added to the `rfid_process.sh` file, the entry will be deleted and then reassigned to the new game. You can do this as often as you'd like._
 
-_Optional_
-## Home Assistant Function
+
+## Home Assistant Function _(Optional)_
 
 In the `rfid_process.sh`, there's an `ha_cmd` function. It's an _extremely_ simple cUrl command that uses a bearer token and accepts a JSON string. It leverages the [Home Assistant API](https://www.home-assistant.io/integrations/api/). Please refer to the [Home Assistant API Docs](https://developers.home-assistant.io/docs/api/rest/) for detailed information. 
 
