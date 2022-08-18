@@ -136,7 +136,7 @@ esac
 ```
 
 ## Known Issues
-- ~~Games with two spaces in the name are having one of the spaces removed as the game name is passed through the string manipulation logic. ~~
+~~Games with two spaces in the name are having one of the spaces removed as the game name is passed through the string manipulation logic. ~~
 ~~E.g.~~
 ```
 Street Fighter II'  Champion Edition -World 920513- -> Street Fighter II' Champion Edition -World 920513-
