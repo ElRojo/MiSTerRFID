@@ -136,12 +136,12 @@ esac
 ```
 
 ## Known Issues
-~~- Games with two spaces in the name are having one of the spaces removed as the game name is passed through the string manipulation logic. 
-E.g.
+- ~~Games with two spaces in the name are having one of the spaces removed as the game name is passed through the string manipulation logic. ~~
+~~E.g.~~
 ```
 Street Fighter II'  Champion Edition -World 920513- -> Street Fighter II' Champion Edition -World 920513-
 ```
-This makes the MiSTer unable to find the rbf file. Some regex will probably fix this. I'll revisit it soon.~~
+~~This makes the MiSTer unable to find the rbf file. Some regex will probably fix this. I'll revisit it soon.~~
 
 This seems to be fixed.
 
