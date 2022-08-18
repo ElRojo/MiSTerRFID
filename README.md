@@ -9,7 +9,7 @@ Most of the ReadMe below is copy/paste from javiwwweb. I have added some notes f
 - [MiSTer Setup](#mister-setup)
 - [Use](#use)
     - [Assigning Games to Cards](#assigning-games-to-cards)
-    - [Home Assistant Function](#home-assistant-function)
+    - [Home Assistant Function](#home-assistant-function-optional)
 - [Known Issues](#known-issues)
 - [Troubleshooting](#troubleshooting)
 
