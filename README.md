@@ -1,6 +1,7 @@
 Forked from: [javiwwweb/MisTerRFID](https://github.com/javiwwweb/MisTerRFID)
 Most of the ReadMe below is copy/paste from javiwwweb. I have added some notes for my changes.
 
+:heavy_exclamation_mark: This code is built for use with games in the _Arcade folder. I may expand this further at a later date. :heavy_exclamation_mark:
 
 # Table of Contents
 - [Hardware Needed](#hardware-needed)
