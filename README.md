@@ -1,3 +1,6 @@
+![MiSTer connected to a MiSTerCade and RFID scanner](./B3953F61-7AEA-49E9-952C-9B12067D3B29.jpeg)
+
+
 Forked from: [javiwwweb/MisTerRFID](https://github.com/javiwwweb/MisTerRFID)
 Most of the ReadMe below is copy/paste from javiwwweb. I have added some notes for my changes.
 
