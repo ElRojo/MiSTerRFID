@@ -7,6 +7,7 @@ Most of the ReadMe below is copy/paste from javiwwweb. I have added some notes f
 :heavy_exclamation_mark: This code is built for use with games in the _Arcade folder. I may expand this further at a later date. :heavy_exclamation_mark:
 
 # Table of Contents
+- [TL;DR Instructions](#tldr)
 - [Hardware Needed](#hardware-needed)
 - [Arduino Hardware Setup](#arduino-hardware-setup)
 - [Write Card Setup](#write-card-setup)
@@ -75,7 +76,7 @@ As you are gathering numbers from your cards or RFID tags, choose an RFID device
 
 ## MiSTer Setup
 
-Copy the files to your MiSTer SD card based on the structure of this repo. Edit case statement of the `rfid_process.sh` script. The line-structure is as follows:
+Copy the files to your MiSTer SD card based on the structure of this repo. _(Optional)_ Edit case statement of the `rfid_process.sh` script. The line-structure is as follows:
 
 ```
 case "$1" in
@@ -83,13 +84,13 @@ case "$1" in
 esac
 ```
 
-Note that the roms need to be the _filename_ only, without the extension (no .mra). Spaces are important and so are quotations. Take care when adding files this way.
+Note that the roms need to be the filename only, without the extension (no .mra). Spaces are important and so are quotations. Take care when adding files this way.
 
 :warning: When adding files manually be careful not to move the beginning of the `case` statement from line 13.:warning:
 
 Doing so will cause the `rfid_write.sh` file to break. If you _do_ need to move the `case` block around, please check the comment in `rfid_write.sh` to move your injection point for creating new games."
 
-_This function is set up for \_Arcade games only, but can be easily adapted to other cores. I would suggest looking at [illusion-pasure-program](https://github.com/illusion-pasture-program/snesRFID)'s `original rfid_process.sh` file_
+This function is set up for \_Arcade games only, but can be easily adapted to other cores. I would suggest looking at [illusion-pasure-program](https://github.com/illusion-pasture-program/snesRFID)'s `original rfid_process.sh` file
 
 ## Use
 
@@ -153,9 +154,30 @@ This seems to be fixed.
 
 ## Troubleshooting
 
-- If your cards don't seem to be scanning in MiSTer, make sure that `serial_listen.sh` actually started. I have had issues with that not booting in the past.
+- If your cards don't seem to be scanning in MiSTer, make sure that `serial_listen.sh` actually started. I have had issues with that not booting in the past. Re-imaging my SD card takes care of this if nothing else.
 - If games aren't being added to the right spot, or being injected in odd places in `rfid_process.sh` make sure you didn't inadvertently move the `case` statement. Read [MiSTer Setup](#MiSTer-Setup).
 - If your write card doesn't function. Make sure you added the card number to the Arduino code **and** re-uploaded after making that change.
+
+## TL;DR
+
+- Set up your Arduino and MFRC522
+
+| RC522 Module Pin | Arduino Pin |
+| ---------------- | ----------- |
+| RST              | D9          |
+| SDA              | D10         |
+| MOSI             | D11         |
+| MISO             | D12         |
+| SCK              | D13         |
+| VCC              | 3.3V        |
+| GRD              | GRD         |
+
+- Write the code to the Arduino
+- Pick a card to be the `write card` and jot down the number
+- Replace the value for `const uint32_t wCard` in `misterrfid.ino` with your card number
+- Re-write to the arduino
+
+
 
 ### THANK YOU
 
