@@ -13,7 +13,3 @@ write_rom()
 }
 
 write_rom "$1"
-
-
-
-echo load_core /media/fat/_Arcade/TNKIII.mra > /dev/MiSTer_cmd
