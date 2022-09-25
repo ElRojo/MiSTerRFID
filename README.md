@@ -4,7 +4,14 @@
 Forked from: [javiwwweb/MisTerRFID](https://github.com/javiwwweb/MisTerRFID)
 Most of the ReadMe below is copy/paste from javiwwweb. I have added some notes for my changes.
 
-:heavy_exclamation_mark: This code is built for use with games in the _Arcade folder. I may expand this further at a later date. :heavy_exclamation_mark:
+:heavy_exclamation_mark: ~~This code is built for use with games in the _Arcade folder. I may expand this further at a later date.~~ 
+Update 09/25/2022: This code *can* be used to run games other than Arcade cores. There is a caveat: you cannot use the "write" card method to add games. You **must** add games manually to the `rfid_process.sh` file. If you want to add a game, you must get the card number first, and then add a line such as this to the case statement:
+
+`"123456789011") play "games/CONSOLEHERE/gamename.extension" ;;`
+
+Be aware that you *can* overwrite a card, though. If accidentally overwrite a card number by using the write card, you will indeed delete that line and need to re-add it.
+
+:heavy_exclamation_mark:
 
 # Table of Contents
 - [TL;DR Instructions](#tldr)
