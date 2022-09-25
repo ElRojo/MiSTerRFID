@@ -1,8 +1,7 @@
 #!/bin/bash
 
 play() {
-        coreCommand="load_core /media/fat/"$1".mra"
-        echo "$coreCommand" > /dev/MiSTer_cmd
+        echo load_core /media/fat/"$1" > /dev/MiSTer_cmd
 }
 
 ha_cmd() {
