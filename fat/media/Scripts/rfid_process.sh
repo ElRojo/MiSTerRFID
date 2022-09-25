@@ -1,7 +1,7 @@
 #!/bin/bash
 
 play() {
-        coreCommand="load_core /media/fat/_Arcade/"$1".mra"
+        coreCommand="load_core /media/fat/"$1".mra"
         echo "$coreCommand" > /dev/MiSTer_cmd
 }
 
