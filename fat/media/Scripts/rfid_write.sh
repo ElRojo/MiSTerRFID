@@ -3,7 +3,7 @@
 write_rom()
 {
     cardNumber="$1"
-    runningGame=\"$(ps aux | awk -F '/media/fat/' '{printf $4}')\"
+    gameTitle=$(ps aux | awk -F '/media/fat/' '{printf $4}')
 
   rfidFile=/media/fat/Scripts/rfid_process.sh
   sed -i "/$cardNumber/d" "$rfidFile"
