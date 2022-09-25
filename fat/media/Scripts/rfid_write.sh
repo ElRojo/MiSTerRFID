@@ -3,11 +3,7 @@
 write_rom()
 {
     cardNumber="$1"
-    runningGame=\"$(ps aux | grep .mra)\"
-    get_title() {   
-    echo "$1" | awk -F 'media/fat/_Arcade/' '{print $3}' | awk -F '\\.mra' '{print $1}'
-    }
-    gameTitle=$(get_title "$runningGame")
+    runningGame=\"$(ps aux | awk -F '/media/fat/' '{printf $4}')\"
 
   rfidFile=/media/fat/Scripts/rfid_process.sh
   sed -i "/$cardNumber/d" "$rfidFile"
@@ -18,3 +14,6 @@ write_rom()
 
 write_rom "$1"
 
+
+
+echo load_core /media/fat/_Arcade/TNKIII.mra > /dev/MiSTer_cmd
