@@ -12,10 +12,10 @@ Below are the currently supported file extensions/cores:
 
 |Core   |Extension(s)|
 |-------|-------------
-|PSX    |.cue, .chd  |
-|SNES   |.sfc, .smc  |
+|PSX    |.cue .chd  |
+|SNES   |.sfc .smc  |
 |NES    |.nes        |
-|Genesis|.md, .gen   |
+|Genesis|.md .gen   |
 |Arcade |.mra        |
 
 There may be bugs. Please report them as an issue if you run into any. 
