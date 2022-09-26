@@ -4,8 +4,22 @@
 Forked from: [javiwwweb/MisTerRFID](https://github.com/javiwwweb/MisTerRFID)
 Most of the ReadMe below is copy/paste from javiwwweb. I have added some notes for my changes.
 
-:heavy_exclamation_mark: This code is built for use with games in the _Arcade folder. I may expand this further at a later date. :heavy_exclamation_mark:
+:heavy_exclamation_mark: ~~This code is built for use with games in the _Arcade folder. I may expand this further at a later date.~~ 
 
+Update 09/25/2022: This code *can* be used to run games other than Arcade cores, but you cannot use the write_card on a game that has been booted using an mgl file. You must boot through the menu core. 
+
+Below are the currently supported file extensions/cores:
+
+|Core   |Extension(s)|
+|-------|-------------
+|PSX    |.cue, .chd  |
+|SNES   |.sfc, .smc  |
+|NES    |.nes        |
+|Genesis|.md, .gen   |
+|Arcade |.mra        |
+
+There may be bugs. Please report them as an issue if you run into any. 
+:heavy_exclamation_mark:
 # Table of Contents
 - [TL;DR Instructions](#tldr)
 - [Hardware Needed](#hardware-needed)

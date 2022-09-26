@@ -30,7 +30,6 @@ write_rom() {
     case $fileFinder in
     *".cue") extension=".cue" ;;
     *".chd") extension=".chd" ;;
-    *".snes") extension=".snes" ;;
     *".sfc") extension=".sfc" ;;
     *".smc") extension=".smc" ;;
     *".gen") extension=".gen" ;;
