@@ -1,7 +1,7 @@
 #!/bin/bash
 
 play() {
-        coreCommand="load_core /media/fat/"$1""
+        coreCommand="load_core "$1""
         echo "$coreCommand" > /dev/MiSTer_cmd
 }
 
