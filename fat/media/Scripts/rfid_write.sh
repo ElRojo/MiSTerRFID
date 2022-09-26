@@ -6,37 +6,44 @@ write_rom() {
   coreName=$(cat /tmp/CORENAME)
   startPath=$(cat /tmp/STARTPATH)
   fullPath=$(cat /tmp/FULLPATH)
-  currentPath=$(cat /tmp/CURRENTPATH)
-  runningGame=${fullPath}/${currentPath}
-  rbfFile=$(cat /tmp/STARTPATH | awk -F '_' '{print $2}')
-  gamePath=/media/fat/"$runningGame"
-  thePath=${gamePath}/${currentPath}
-  if [[ ${startPath} = *".mgl" ]]; then
-    return
-  fi
-  if [[ ${fullPath} != "_Arcade" ]]; then
-    fileFinder=$(ls -1 "$gamePath"/)
-    case $fileFinder in
-    *".cue"*) extension=".cue" ;;
-    *".chd"*) extension=".chd" ;;
-    *".snes"*) extension=".snes" ;;
-    *".nes"*) extension=".nes" ;;
-    esac
-  elif [[ ${fullPath} = "_Arcade" ]]; then
-    extension=".mra"
-  fi
+  game=$(cat /tmp/CURRENTPATH)
+  rootPath=/media/fat/
+  fullGameDir="$rootPath""$fullPath"/"$game"              #/media/fat/games/CORE/Gamedir
+  rbfFile=_$(cat /tmp/STARTPATH | awk -F _ '{printf $2}') #_Folder/CORE
 
   writeMgl() {
-    sedPath="$thePath""$extension".mgl
-    if [ ! -f "$sedPath" ]; then
-      echo "<mistergamedescription><rbf>_"$rbfFile"</rbf><file delay=\"2\" type=\"f\" index=\"0\" path=\"../../"$runningGame"/"$currentPath""$extension"\"/></mistergamedescription>" >"$sedPath"
+    if [ ! -f "$SedPath" ]; then
+      echo "<mistergamedescription><rbf>"$rbfFile"</rbf><file delay=\"2\" type=\"f\" index=\"0\" path=\"../../"$relativeGameDir"\"/></mistergamedescription>" >"$sedPath"
     fi
   }
 
   writeArcade() {
     arcadeWithGame=$(cat /tmp/STARTPATH | awk -F /media/fat/ '{printf $2}' | awk -F .mra '{printf $1}')
-    sedPath=/media/fat/"$arcadeWithGame""$extension"
   }
+
+  if [[ ${startPath} = *".mgl" ]]; then
+    return
+  fi
+
+  if [[ ${fullPath} != "_Arcade" ]]; then
+    fileFinder=$(ls -1 "$fullGameDir"/)
+    case $fileFinder in
+    *".cue") extension=".cue" ;;
+    *".chd") extension=".chd" ;;
+    *".snes") extension=".snes" ;;
+    *".sfc") extension=".sfc" ;;
+    *".smc") extension=".smc" ;;
+    *".gen") extension=".gen" ;;
+    *".nes") extension=".nes" ;;
+    *".md") extension=".md" ;;
+    esac
+    relativeGameDir="$fullPath"/"$game"/"$game""$extension" #games/CORE/Gamedir/Game.EXTENSION
+    sedPath="$fullGameDir"/"$game""$extension".mgl          #/media/fat/games/CORE/Gamedir/Game.EXTENSION.mgl
+  elif [[ ${fullPath} = "_Arcade" ]]; then
+    extension=".mra"
+    sedPath="$rootPath""$arcadeWithGame""$extension"
+  fi
+
   case $extension in
   ".mra") writeArcade ;;
   *) writeMgl ;;
