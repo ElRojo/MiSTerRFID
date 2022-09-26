@@ -19,8 +19,6 @@ write_rom() {
   *) extension=".mra" ;;
   esac
 
-  gameName=
-
   writeMgl() {
     sedPath="$thePath""$extension".mgl
     if [ ! -f "$sedPath" ]; then
