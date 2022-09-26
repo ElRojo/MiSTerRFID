@@ -11,13 +11,20 @@ write_rom() {
   rbfFile=$(cat /tmp/STARTPATH | awk -F '_' '{print $2}')
   gamePath=/media/fat/"$runningGame"
   thePath=${gamePath}/${currentPath}
-
-  case $coreName in
-  "PSX") extension=".cue" ;;
-  "SNES") extension=".snes" ;;
-  "NES") extension=".nes" ;;
-  *) extension=".mra" ;;
-  esac
+  if [[ ${startPath} = *".mgl" ]]; then
+    return
+  fi
+  if [[ ${fullPath} != "_Arcade" ]]; then
+    fileFinder=$(ls -1 "$gamePath"/)
+    case $fileFinder in
+    *".cue"*) extension=".cue" ;;
+    *".chd"*) extension=".chd" ;;
+    *".snes"*) extension=".snes" ;;
+    *".nes"*) extension=".nes" ;;
+    esac
+  elif [[ ${fullPath} = "_Arcade" ]]; then
+    extension=".mra"
+  fi
 
   writeMgl() {
     sedPath="$thePath""$extension".mgl
