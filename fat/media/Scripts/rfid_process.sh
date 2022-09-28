@@ -1,15 +1,20 @@
 #!/bin/bash
 
-play() {
-        coreCommand="load_core "$1""
-        echo "$coreCommand" > /dev/MiSTer_cmd
-}
+unset gamefound
+while read -r line; do
+	rfid=$(echo "$line" | cut -f1)
+	game=$(echo "$line" | cut -f2)
+	if [ "x$rfid" == "x$1" ]; then
+		gamefound="$game"
+		break
+	fi
+done </media/fat/Scripts/game_list_rfid.conf
 
-ha_cmd() {
-        TOKEN=""
-        curl -X POST -H "Authorization: Bearer $TOKEN" -H "Content-Type: application/json" -d $1 $2 
-}
+if [ "x$gamefound" == "x" ]; then
+	echo "RFID tag not found into config file..."
+	return
+fi
 
-case "$1" in 
+echo "Running: $gamefound"
+eval "$gamefound"
 
-esac
