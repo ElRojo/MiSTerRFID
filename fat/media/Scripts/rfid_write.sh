@@ -40,6 +40,7 @@ write_rom() {
 		*".gen") extension=".gen" ;;
 		*".nes") extension=".nes" ;;
 		*".md") extension=".md" ;;
+		*".neo") extension=".neo"
 		esac
 		relativeGameDir="$fullPath"/"$game"/"$game""$extension" #games/CORE/Gamedir/Game.EXTENSION
 		sedPath="$fullGameDir"/"$game""$extension".mgl          #/media/fat/games/CORE/Gamedir/Game.EXTENSION.mgl
