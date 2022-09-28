@@ -1,5 +1,7 @@
 #!/bin/bash
 
+
+##coded-with-claws
 unset gamefound
 while read -r line; do
 	rfid=$(echo "$line" | cut -f1)
@@ -17,4 +19,4 @@ fi
 
 echo "Running: $gamefound"
 eval "$gamefound"
-
+##
