@@ -26,9 +26,9 @@ There may be bugs. Please report them as an issue if you run into any.
 - [Arduino Hardware Setup](#arduino-hardware-setup)
 - [Write Card Setup](#write-card-setup)
 - [MiSTer Setup](#mister-setup)
+    -[Manually Adding Cores](#manually-adding-cores)
 - [Use](#use)
     - [Assigning Games to Cards](#assigning-games-to-cards)
-    - [Home Assistant Function](#home-assistant-function-optional)
 - [Known Issues](#known-issues)
 - [Troubleshooting](#troubleshooting)
 
@@ -104,7 +104,41 @@ As you are gathering numbers from your cards or RFID tags, choose an RFID device
 
 Copy the files to your MiSTer SD card based on the structure of this repo. ATTENTION: Make sure you don't overwrite user-startup.sh if you have other services running like Favorites, Super Attract Mode or TTY2OLED. If you use TTY2OLED, make sure you assign the right ttydev to the right device.
 
-Note that the roms need to be the filename only, without the extension (no .mra). Spaces are important and so are quotations. Take care when adding files this way.
+### Manually Adding Cores
+
+Although the preferred method for adding games is by using the `write card`, you can manually add games to `game_list_rfid.conf` for unsupported files or if you find it easier/quicker.
+
+- Gather card numbers using the arduino serial monitor
+- If the game is an arcade core (.mra extension):
+	- use the absolute path for the .mra file. Please see the example below.
+- If the game is _not_ an arcade core: 
+	- create an [mgl file](https://mister-devel.github.io/MkDocs_MiSTer/advanced/mgl/) for the game
+	- You can create these almost anywhere, but I recommend creating them the same place that `rfid_write.sh` would, which is: `/media/fat/games/CORE/GameFolder/Game.extension.mgl` An example MGL is shown below.
+- Starting on line 4 of `game_list_rfid.conf` add games using the following format. Please be advised that the space between `CARDNUMBER` and `echo` is a TAB, not spaces.
+
+### Manual Console Core Example
+```
+CARDNUMBER	echo load_core "/absolute/path/to/.ext.mgl" > /MiSTer_cmd
+1452135431	echo load_core "/media/fat/games/PSX/Crash Bandicoot/Crash Bandicoot.cue.mgl" > /MiSTer_cmd
+```
+
+### Manual Arcade Core Example
+```
+CARDNUMBER	echo load_core "/absolute/path/to/arcade/.mra" > /MiSTer_cmd
+5132153135	echo load_core "/media/fat/_Arcade/1942.mra" > /MiSTer_cmd
+```
+
+### MGL Example
+
+The filename of this example would be: `Crash Bandicoot.cue.mgl`
+The absolute filepath of this example would be: `/media/fat/games/PSX/Crash Bandicoot/Crash Bandicoot.cue.mgl`
+
+```
+<mistergamedescription>
+<rbf>_Console/PSX</rbf>
+<file delay="2" type="f" index="0" path="../../games/PSX/Crash Bandicoot/Crash Bandicoot.cue"/>
+</mistergamedescription>
+```
 
 ## Use
 
@@ -128,6 +162,8 @@ Street Fighter II'  Champion Edition -World 920513- -> Street Fighter II' Champi
 ~~This makes the MiSTer unable to find the rbf file. Some regex will probably fix this. I'll revisit it soon.~~
 
 This seems to be fixed.
+
+NeoGeo games do not currently work. They can be manually added, though.
 
 ## Troubleshooting
 
@@ -160,4 +196,4 @@ This seems to be fixed.
 ### THANK YOU
 
 _Thanks to illusion-pasture-program and javiwwweb for the initial code and ideas._
-_Thanks to mrchrisster and coded-with-claws for their contributions!_
+_Thanks to @[mrchrisster](https://github.com/mrchrisster) for their clarifications in the ReadMe and @[coded-with-claws](https://github.com/coded-with-claws) for their contribution for the new `rfid_process.sh` code!_
