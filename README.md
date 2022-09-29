@@ -146,15 +146,21 @@ Relative to the games folder for the PSX core is: `Crash Bandicoot/Crash Bandico
 
 ## Use
 
-After editing the `rfid_process.sh` script, turn off your MiSTer. Plug your Arduino into an available USB port on your USB board module and turn on your MiSTer. Depending on how many scripts you have running, it can take up to 30 seconds from first turning on the power to the RFID reader becoming available. Once the RFID is available, you can start lunching games (if you added cases to the `rfid_process.sh` file), or begin [Assigning Games to Cards](#Assigning-Games-to-Cards)
+- After editing the `rfid_process.sh` script, turn off your MiSTer. 
+- Plug your Arduino into an available USB port on your USB board module and turn on your MiSTer. Depending on how many scripts you have running, it can take up to 30 seconds from first turning on the power to the RFID reader becoming available. 
+- Once the RFID is available, you can start lunching games (if you added cases to the `rfid_process.sh` file), or begin [Assigning Games to Cards](#Assigning-Games-to-Cards)
 
 Note: This can be combined with MisTer.ini option bootcore= to automatically launch an arcade core (MRA file) upon starting up your MisTer. The `rfid_process.sh` will run in the background waiting for a card to be presented.
 
 ## Assigning Games to Cards
 
-First, launch a game using the core menu. Once the game has booted, scan your `write card`. This will tell the Arduino that it needs to run the `rfid_write.sh` file on the next card scan. Scan a new (or already assigned) card. The card will be programaticaly added to `rfid_process.sh` and the next time you scan that card, it will boot the game. Remember that you cannot scan the same card twice, though. Scan a different card before scanning the just-written one in order to test it.
+- Launch a game using the core menu. Once the game has booted, scan your `write card`. This will tell the Arduino that it needs to run the `rfid_write.sh` file on the next card scan. 
+- Scan a new (or already assigned) card. The card will be programaticaly added to `game_list_rfid.conf` and the next time you scan that card, it will boot the game. 
+- Remember that you cannot scan the same card twice, though. Scan a different card before scanning the just-written one in order to test it. 
 
-_Cards can be overwritten. If you attempt to scan a card that is already added to the `rfid_process.sh` file, the entry will be deleted and then reassigned to the new game. You can do this as often as you'd like._
+_Cards can be overwritten. If you attempt to scan a card that is already added to the `game_list_rfid.sh` file, the entry will be deleted and then reassigned to the new game. You can do this as often as you'd like._
+
+_Games cannot be assigned/added when booted from an MGL file. You must do this process after booting from the Menu Core!_
 
 ## Known Issues
 
