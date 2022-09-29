@@ -104,7 +104,7 @@ As you are gathering numbers from your cards or RFID tags, choose an RFID device
 
 Copy the files to your MiSTer SD card based on the structure of this repo. ATTENTION: Make sure you don't overwrite user-startup.sh if you have other services running like Favorites, Super Attract Mode or TTY2OLED. If you use TTY2OLED, make sure you assign the right ttydev to the right device.
 
-### Manually Adding Cores
+#### Manually Adding Cores
 
 Although the preferred method for adding games is by using the `write card`, you can manually add games to `game_list_rfid.conf` for unsupported files or if you find it easier/quicker.
 
@@ -113,24 +113,24 @@ Although the preferred method for adding games is by using the `write card`, you
   - use the absolute path for the .mra file. Please see the example below.
 - If the game is _not_ an arcade core:
   - create an [mgl file](https://mister-devel.github.io/MkDocs_MiSTer/advanced/mgl/) for the game
-  - You can create these almost anywhere, but I recommend creating them the same place that `rfid_write.sh` would, which is: `/media/fat/games/CORE/GameFolder/Game.extension.mgl` An example MGL is shown below.
+  - You can create these almost anywhere, but I recommend creating them the same place that `rfid_write.sh` would, which is: `/media/fat/games/CORE/GameFolder/Game.mgl` An example MGL is shown below. Note: the `GameFolder` doesn't exist for all cores.
 - Starting on line 4 of `game_list_rfid.conf` add games using the following format. Please be advised that the space between `CARDNUMBER` and `echo` is a TAB, not spaces.
 
-### Manual Console Core Example
+#### Manual Console Core Example
 
 ```
-CARDNUMBER	echo load_core "/absolute/path/to/.ext.mgl" > /MiSTer_cmd
-1452135431	echo load_core "/media/fat/games/PSX/Crash Bandicoot/Crash Bandicoot.cue.mgl" > /MiSTer_cmd
+CARDNUMBER	echo load_core "/absolute/path/to/rom/file.mgl" > /MiSTer_cmd
+1452135431	echo load_core "/media/fat/games/PSX/Crash Bandicoot/Crash Bandicoot.mgl" > /MiSTer_cmd
 ```
 
-### Manual Arcade Core Example
+#### Manual Arcade Core Example
 
 ```
 CARDNUMBER	echo load_core "/absolute/path/to/arcade/.mra" > /MiSTer_cmd
 5132153135	echo load_core "/media/fat/_Arcade/1942.mra" > /MiSTer_cmd
 ```
 
-### MGL Example
+#### MGL Example
 
 The filename of this example would be: `Crash Bandicoot.cue.mgl`
 The absolute filepath of this example would be: `/media/fat/games/PSX/Crash Bandicoot/Crash Bandicoot.cue.mgl`
