@@ -167,7 +167,7 @@ Street Fighter II'  Champion Edition -World 920513- -> Street Fighter II' Champi
 
 This seems to be fixed.
 
-NeoGeo games do not currently work. They can be manually added, though.
+NeoGeo games must use the `.neo` extension. You cannot use a darksoft roll-up without converting to `.neo`. This is a limitation from `.mgl` files and how they load.
 
 ## Troubleshooting
 
