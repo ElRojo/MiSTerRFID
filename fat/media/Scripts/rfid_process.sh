@@ -1,6 +1,5 @@
 #!/bin/bash
 
-
 ##coded-with-claws
 unset gamefound
 while read -r line; do
@@ -10,7 +9,7 @@ while read -r line; do
 		gamefound="$game"
 		break
 	fi
-done </media/fat/Scripts/game_list_rfid.conf
+done </media/fat/Scripts/rfid_util/game_list_rfid.conf
 
 if [ "x$gamefound" == "x" ]; then
 	echo "RFID tag not found into config file..."

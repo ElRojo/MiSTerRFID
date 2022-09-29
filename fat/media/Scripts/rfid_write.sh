@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source rfid_neoGeo_games.sh
+source ./rfid_util/rfid_neoGeo_games.sh
 
 write_rom() {
 
@@ -11,7 +11,7 @@ write_rom() {
 	mountType="f"
 	indexVal="0"
 	misterCmd=/dev/MiSTer_cmd
-	confFile=/media/fat/Scripts/game_list_rfid.conf
+	confFile=/media/fat/Scripts/rfid_util/game_list_rfid.conf
 	coreName=$(cat /tmp/CORENAME)
 	startPath=$(cat /tmp/STARTPATH)
 	fullPath=$(cat /tmp/FULLPATH)
@@ -28,14 +28,12 @@ write_rom() {
 	}
 
 	writeArcade() {
+		extension=".mra"
+		sedPath="$rootPath""$arcadeWithGame""$extension"
 		arcadeWithGame=$(cat /tmp/STARTPATH | awk -F /media/fat/ '{printf $2}' | awk -F .mra '{printf $1}')
 	}
 
-	if [[ ${startPath} = *".mgl" ]]; then
-		return
-	fi
-
-	if [[ ${fullPath} != *_Arcade* ]]; then
+	prepareMgl() {
 		if [[ ${coreName} = NEOGEO ]]; then
 			absoluteGameDir="$neoGameDir"
 			rbfFile=_Console/NEOGEO
@@ -84,16 +82,20 @@ write_rom() {
 		"NEOGEO") relativeGameDir="$neoGeoGame""$extension" sedPath="$neoGameDir"/"$game".mgl ;;
 		*) relativeGameDir="$game"/"$game""$extension" sedPath="$absoluteGameDir"/"$game".mgl ;;
 		esac
+		writeMgl
+	}
 
-	elif [[ ${fullPath} = *_Arcade* ]]; then
-		extension=".mra"
-		sedPath="$rootPath""$arcadeWithGame""$extension"
+	if [[ ${startPath} = *".mgl" ]]; then
+		return
 	fi
 
-	case $extension in
-	".mra") writeArcade ;;
-	*) writeMgl ;;
-	esac
+	if [[ ${fullPath} != *_Arcade* ]]; then
+		prepareMgl
+
+	elif [[ ${fullPath} = *_Arcade* ]]; then
+		writeArcade
+
+	fi
 
 	sed -i "/$cardNumber/d" "$confFile"
 	sed -i "4i $cardNumber	echo load_core \"$sedPath\" > $misterCmd" "$confFile"
