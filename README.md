@@ -1,34 +1,35 @@
 ![MiSTer connected to a MiSTerCade and RFID scanner](./B3953F61-7AEA-49E9-952C-9B12067D3B29.jpeg)
 
-
 Forked from: [javiwwweb/MisTerRFID](https://github.com/javiwwweb/MisTerRFID)
 Most of the ReadMe below is copy/paste from javiwwweb. I have added some notes for my changes.
 
-:heavy_exclamation_mark: ~~This code is built for use with games in the _Arcade folder. I may expand this further at a later date.~~ 
+:heavy_exclamation_mark: ~~This code is built for use with games in the \_Arcade folder. I may expand this further at a later date.~~
 
-Update 09/25/2022: This code *can* be used to run games other than Arcade cores, but you cannot use the write_card on a game that has been booted using an mgl file. You must boot through the menu core. 
+Update 09/25/2022: This code _can_ be used to run games other than Arcade cores, but you cannot use the write_card on a game that has been booted using an mgl file. You must boot through the menu core.
 
 Below are the currently supported file extensions/cores:
 
-|Core   |Extension(s)|
-|-------|-------------
-|PSX    |.cue .chd  |
-|SNES   |.sfc .smc  |
-|NES    |.nes        |
-|Genesis|.md .gen   |
-|Arcade |.mra        |
+| Core    | Extension(s) |
+| ------- | ------------ |
+| PSX     | .cue .chd    |
+| SNES    | .sfc .smc    |
+| NES     | .nes         |
+| NeoGeo  | .neo         |
+| Genesis | .md .gen     |
+| Arcade  | .mra         |
 
-There may be bugs. Please report them as an issue if you run into any. 
+There may be bugs. Please report them as an issue if you run into any.
 :heavy_exclamation_mark:
+
 # Table of Contents
+
 - [TL;DR Instructions](#tldr)
 - [Hardware Needed](#hardware-needed)
 - [Arduino Hardware Setup](#arduino-hardware-setup)
 - [Write Card Setup](#write-card-setup)
-- [MiSTer Setup](#mister-setup)
-    -[Manually Adding Cores](#manually-adding-cores)
+- [MiSTer Setup](#mister-setup) -[Manually Adding Cores](#manually-adding-cores)
 - [Use](#use)
-    - [Assigning Games to Cards](#assigning-games-to-cards)
+  - [Assigning Games to Cards](#assigning-games-to-cards)
 - [Known Issues](#known-issues)
 - [Troubleshooting](#troubleshooting)
 
@@ -58,14 +59,15 @@ _This version allows you to assign games to cards without needing to edit the `r
 | GRD              | GRD         |
 
 ## Arduino Software Setup
- - Download Arduino software
- - Connect Arduino Nano
- - Open misterrfid.ino
- - Go to Tools -> Manage Libraries and search for MFRC522
- - Install MFRC522
- - Verify Installation and Upload
 
- On your computer, attach the serial monitor to your Arduino and you should see it repeating `. rfid_process.sh noscan` about every second. As soon as your scan a RFID card, it should output `. rfid_process.sh 12345678`. The number is that card's unique ID. The reader will not scan the same card two times in a row. Make note of the card's unique id.
+- Download Arduino software
+- Connect Arduino Nano
+- Open misterrfid.ino
+- Go to Tools -> Manage Libraries and search for MFRC522
+- Install MFRC522
+- Verify Installation and Upload
+
+On your computer, attach the serial monitor to your Arduino and you should see it repeating `. rfid_process.sh noscan` about every second. As soon as your scan a RFID card, it should output `. rfid_process.sh 12345678`. The number is that card's unique ID. The reader will not scan the same card two times in a row. Make note of the card's unique id.
 
 :warning: Skipping steps below will cause your code to not function! :warning:
 
@@ -86,8 +88,6 @@ The HEX 0x03 control the gain. In my case that was the value that would penetrat
 | 0x05 = 38 dB HEX   |
 | 0x06 = 43 dB HEX   |
 | 0x07 = 48 dB HEX   |
-
-
 
 On your computer, attach the serial monitor to your Arduino and you should see it repeating `. rfid_process.sh noscan` about every second. As soon as your scan a RFID card, it should output `. rfid_process.sh 12345678`. The number is that card's unique ID. The reader will not scan the same card two times in a row, but you can scan another card, and then the original in order to see a card's number again.
 
@@ -110,19 +110,21 @@ Although the preferred method for adding games is by using the `write card`, you
 
 - Gather card numbers using the arduino serial monitor
 - If the game is an arcade core (.mra extension):
-	- use the absolute path for the .mra file. Please see the example below.
-- If the game is _not_ an arcade core: 
-	- create an [mgl file](https://mister-devel.github.io/MkDocs_MiSTer/advanced/mgl/) for the game
-	- You can create these almost anywhere, but I recommend creating them the same place that `rfid_write.sh` would, which is: `/media/fat/games/CORE/GameFolder/Game.extension.mgl` An example MGL is shown below.
+  - use the absolute path for the .mra file. Please see the example below.
+- If the game is _not_ an arcade core:
+  - create an [mgl file](https://mister-devel.github.io/MkDocs_MiSTer/advanced/mgl/) for the game
+  - You can create these almost anywhere, but I recommend creating them the same place that `rfid_write.sh` would, which is: `/media/fat/games/CORE/GameFolder/Game.extension.mgl` An example MGL is shown below.
 - Starting on line 4 of `game_list_rfid.conf` add games using the following format. Please be advised that the space between `CARDNUMBER` and `echo` is a TAB, not spaces.
 
 ### Manual Console Core Example
+
 ```
 CARDNUMBER	echo load_core "/absolute/path/to/.ext.mgl" > /MiSTer_cmd
 1452135431	echo load_core "/media/fat/games/PSX/Crash Bandicoot/Crash Bandicoot.cue.mgl" > /MiSTer_cmd
 ```
 
 ### Manual Arcade Core Example
+
 ```
 CARDNUMBER	echo load_core "/absolute/path/to/arcade/.mra" > /MiSTer_cmd
 5132153135	echo load_core "/media/fat/_Arcade/1942.mra" > /MiSTer_cmd
@@ -156,9 +158,11 @@ _Cards can be overwritten. If you attempt to scan a card that is already added t
 
 ~~Games with two spaces in the name are having one of the spaces removed as the game name is passed through the string manipulation logic.~~
 ~~E.g.~~
+
 ```
 Street Fighter II'  Champion Edition -World 920513- -> Street Fighter II' Champion Edition -World 920513-
 ```
+
 ~~This makes the MiSTer unable to find the rbf file. Some regex will probably fix this. I'll revisit it soon.~~
 
 This seems to be fixed.
@@ -190,8 +194,6 @@ NeoGeo games do not currently work. They can be manually added, though.
 - Replace the value for `const uint32_t wCard` in `misterrfid.ino` with your card number
 - Re-write to the arduino
 - Add Scripts files to the `Scripts` folder on the MiSTer, as well as the linux file
-
-
 
 ### THANK YOU
 
