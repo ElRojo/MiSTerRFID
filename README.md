@@ -164,17 +164,6 @@ _Games cannot be assigned/added when booted from an MGL file. You must do this p
 
 ## Known Issues
 
-~~Games with two spaces in the name are having one of the spaces removed as the game name is passed through the string manipulation logic.~~
-~~E.g.~~
-
-```
-Street Fighter II'  Champion Edition -World 920513- -> Street Fighter II' Champion Edition -World 920513-
-```
-
-~~This makes the MiSTer unable to find the rbf file. Some regex will probably fix this. I'll revisit it soon.~~
-
-This seems to be fixed.
-
 NeoGeo games must use the `.neo` extension. You cannot use a darksoft roll-up without converting to `.neo`. This is a limitation from `.mgl` files and how they load.
 
 ## Troubleshooting
