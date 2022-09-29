@@ -132,7 +132,9 @@ CARDNUMBER	echo load_core "/absolute/path/to/arcade/rom.mra" > /MiSTer_cmd
 #### MGL Example
 
 The filename of this example would be: `Crash Bandicoot.cue`
+
 The absolute filepath of this example would be: `/media/fat/games/PSX/Crash Bandicoot/Crash Bandicoot.cue`
+
 Relative to the games folder for the PSX core is: `Crash Bandicoot/Crash Bandicoot.cue`
 
 ```
