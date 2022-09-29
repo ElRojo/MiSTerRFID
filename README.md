@@ -97,7 +97,6 @@ As you are gathering numbers from your cards or RFID tags, choose an RFID device
 
 ```
   const uint32_t wCard = 123456789;
-
 ```
 
 ## MiSTer Setup
@@ -126,19 +125,20 @@ CARDNUMBER	echo load_core "/absolute/path/to/rom/file.mgl" > /MiSTer_cmd
 #### Manual Arcade Core Example
 
 ```
-CARDNUMBER	echo load_core "/absolute/path/to/arcade/.mra" > /MiSTer_cmd
+CARDNUMBER	echo load_core "/absolute/path/to/arcade/rom.mra" > /MiSTer_cmd
 5132153135	echo load_core "/media/fat/_Arcade/1942.mra" > /MiSTer_cmd
 ```
 
 #### MGL Example
 
-The filename of this example would be: `Crash Bandicoot.cue.mgl`
-The absolute filepath of this example would be: `/media/fat/games/PSX/Crash Bandicoot/Crash Bandicoot.cue.mgl`
+The filename of this example would be: `Crash Bandicoot.cue`
+The absolute filepath of this example would be: `/media/fat/games/PSX/Crash Bandicoot/Crash Bandicoot.cue`
+Relative to the games folder for the PSX core is: `Crash Bandicoot/Crash Bandicoot.cue`
 
 ```
 <mistergamedescription>
 <rbf>_Console/PSX</rbf>
-<file delay="2" type="f" index="0" path="../../games/PSX/Crash Bandicoot/Crash Bandicoot.cue"/>
+<file delay="2" type="f" index="0" path="Crash Bandicoot/Crash Bandicoot.cue"/>
 </mistergamedescription>
 ```
 
