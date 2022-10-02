@@ -118,15 +118,15 @@ Although the preferred method for adding games is by using the `write card`, you
 #### Manual Console Core Example
 
 ```
-CARDNUMBER	echo load_core "/absolute/path/to/rom/file.mgl" > /MiSTer_cmd
-1452135431	echo load_core "/media/fat/games/PSX/Crash Bandicoot/Crash Bandicoot.mgl" > /MiSTer_cmd
+CARDNUMBER	echo load_core "/absolute/path/to/rom/file.mgl" > /dev/MiSTer_cmd
+1452135431	echo load_core "/media/fat/games/PSX/Crash Bandicoot/Crash Bandicoot.mgl" > /dev/MiSTer_cmd
 ```
 
 #### Manual Arcade Core Example
 
 ```
-CARDNUMBER	echo load_core "/absolute/path/to/arcade/rom.mra" > /MiSTer_cmd
-5132153135	echo load_core "/media/fat/_Arcade/1942.mra" > /MiSTer_cmd
+CARDNUMBER	echo load_core "/absolute/path/to/arcade/rom.mra" > /dev/MiSTer_cmd
+5132153135	echo load_core "/media/fat/_Arcade/1942.mra" > /dev/MiSTer_cmd
 ```
 
 #### MGL Example
@@ -148,7 +148,7 @@ Relative to the games folder for the PSX core is: `Crash Bandicoot/Crash Bandico
 
 - After editing the `rfid_process.sh` script, turn off your MiSTer. 
 - Plug your Arduino into an available USB port on your USB board module and turn on your MiSTer. Depending on how many scripts you have running, it can take up to 30 seconds from first turning on the power to the RFID reader becoming available. 
-- Once the RFID is available, you can start lunching games (if you added cases to the `rfid_process.sh` file), or begin [Assigning Games to Cards](#Assigning-Games-to-Cards)
+- Once the RFID is available, you can start lunching games (if you added games to the `game_list_rfid.conf` file), or begin [Assigning Games to Cards](#Assigning-Games-to-Cards)
 
 Note: This can be combined with MisTer.ini option bootcore= to automatically launch an arcade core (MRA file) upon starting up your MisTer. The `rfid_process.sh` will run in the background waiting for a card to be presented.
 
@@ -169,7 +169,7 @@ NeoGeo games must use the `.neo` extension. You cannot use a darksoft roll-up wi
 ## Troubleshooting
 
 - If your cards don't seem to be scanning in MiSTer, make sure that `serial_listen.sh` actually started. I have had issues with that not booting in the past. Re-imaging my SD card takes care of this if nothing else.
-- If games aren't being added to the right spot, or being injected in odd places in `rfid_process.sh` make sure you didn't inadvertently move the `case` statement. Read [MiSTer Setup](#MiSTer-Setup).
+- If games aren't being added to the right spot, or being injected in odd places in `rfid_process.sh` make sure you respected the format into `game_list_rfid.conf`. Read [MiSTer Setup](#MiSTer-Setup).
 - If your write card doesn't function. Make sure you added the card number to the Arduino code **and** re-uploaded after making that change.
 
 ## TL;DR
