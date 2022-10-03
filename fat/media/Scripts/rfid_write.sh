@@ -8,6 +8,7 @@ write_rom() {
 	#             Env Variables              #
 	#==========================================
 	cardNumber="$1"
+	neoGeoName=""
 	mountType="f"
 	indexVal="0"
 	foundGame=""
@@ -21,11 +22,11 @@ write_rom() {
 	rootPath=/media/fat/
 	gameLocation="$rootPath""$fullPath"/"$game"             #/media/fat/games/CORE/Game #was absoluteGameDir
 	gameWithDir="$gameLocation"/"$game"                     #/media/fat/games/CORE/Game/Game
-	relativeGamesDir="$rootPath""$fullPath"                 #/media/fat/games/CORE
+	absoluteGamesDir="$rootPath""$fullPath"                 #/media/fat/games/CORE
 	rbfFile=_$(cat /tmp/STARTPATH | awk -F _ '{printf $2}') #_Folder/CORE
 
 	findIt() {
-		foundGame=$(find "$relativeGamesDir" -name "$1.*" -print) #/media/fat/games/CORE/Game
+		foundGame=$(find "$absoluteGamesDir" -name "$1.*" -print) #/media/fat/games/CORE/Game
 		return "$foundGame"
 	}
 
@@ -41,56 +42,57 @@ write_rom() {
 
 	prepareMgl() {
 
-		findIt "$game"
-
 		isNeoGeo() {
 			if [[ ${1} = NEOGEO ]]; then
 				for i in "${!neoGeoEnglish[@]}"; do
 					if [[ "$(echo "$game" | grep -w "${neoGeoEnglish[$i]}")" ]]; then #This code pulled from https://github.com/mrchrisster/MiSTer_SAM/blob/main/MiSTer_SAM_on.sh. Awesome idea!
-						processedName="$i"
+						neoGeoName="$i"
 					fi
 				done
 			fi
 		}
-
+		findIt "$game"
 		isNeoGeo "$coreName"
 
-		# extension="${game##*.}" #.ext
-
-		# case $coreName in
-		# # "PSX") case "$foundGame" in
-		# # 	*".cue") extension=".cue" ;;
-		# # 	*".chd") extension=".chd" ;;
-		# # 	esac ;;
-		# # "NES") case "$foundGame" in
-		# # 	*".nes") extension=".nes" ;;
-		# # 	esac ;;
-		# # "Genesis") case "$foundGame" in
-		# # 	*".bin") extension=".bin" ;;
-		# # 	*".gen") extension=".gen" ;;
-		# # 	esac ;;
-		# # "SNES") case "$foundGame" in
-		# # 	*".sfc") extension=".sfc" ;;
-		# # 	*".smd") extension=".smd" ;;
-		# # 	*".srm") extension=".srm" ;;
-		# # 	esac ;;
-		# # "NEOGEO") case "$foundGame" in
-		# # 	*".neo") extension=".neo" ;;
-		# # 	esac ;;
-		# esac
-
 		case $coreName in
-
 		"Genesis") case "$foundGame" in
 			*".bin") extension=".bin" ;;
 			*".gen") extension=".gen" ;;
+			*".md") extension=".md" ;;
+			esac ;;
+		"GAMEBOY") case "$foundGame" in
+			*".bin") extension=".bin" ;;
+			*".gbc") extension=".gbc" ;;
+			*".gb") extension=".gb" ;;
+			esac ;;
+		"GBA") case "$foundGame" in
+			*".gba") extension=".gba" ;;
+			esac ;;
+		"SGB") case "$foundGame" in
+			*".gbc") extension=".gbc" ;;
+			*".gb") extension=".gb" ;;
+			esac ;;
+		"SNES") case "$foundGame" in
+			*".sfc") extension=".sfc" ;;
+			*".smc") extension=".smc" ;;
+			*".bin") extension=".bin" ;;
+			*".bs") extension=".bs" ;;
+			*".spc") extension=".spc" ;;
+			esac ;;
+		"PSX") case "$foundGame" in
+			*".cue") extension=".cue" ;;
+			*".chd") extension=".chd" ;;
+			esac ;;
+		"MegaCD") case "$foundGame" in
+			*".cue") extension=".cue" ;;
+			*".chd") extension=".chd" ;;
 			esac ;;
 		*) case "$foundGame" in
-			*".sfc") extension=".sfc" ;;
-			*".smd") extension=".smd" ;;
 			*".srm") extension=".srm" ;;
 			*".neo") extension=".neo" ;;
+			*) extension="None Found!" ;;
 			esac ;;
+		*) extension="No core match!" ;;
 		esac
 
 		# case "$foundGame" in
@@ -128,8 +130,25 @@ write_rom() {
 		*) mountType="f" indexVal=0 ;;
 		esac
 
-		sedPath="$gameLocation"/"$game".mgl          #/media/fat/games/CORE/Game.mgl
+		fullFoundGamePath=$(echo "$foundGame" | grep "$extension")
+		fullFoundGamePathNoExt="${fullFoundGamePath%.*}"
+		if [[ "$coreName" = NEOGEO ]]; then
+			processedName="$neoGeoName"
+		else
+			processedName=$(echo "$fullFoundGamePathNoExt" | awk -F "$absoluteGamesDir"/ '{printf $2}')
+		fi
+		sedPath="$fullFoundGamePathNoExt".mgl        #/media/fat/games/CORE/Game.mgl
 		relativeGameDir="$processedName""$extension" #Game.ext
+
+		#was 		relativeGameDir="$processedName""$extension" #Game.ext
+		# 	  echo "isDirRtn is equal to $isDirRtn before statement"
+		# if [ "$isDirRtn" -eq 0 ]; then
+		#   sedPath="$gameWithDir".mgl                  #/media/fat/games/CORE/Game/Game.mgl
+		#   relativeGameDir="$game"/"$game""$extension" #Game/Game.ext
+		# else
+		#   sedPath="$gameLocation"/"$game".mgl         #/media/fat/games/CORE/Game.mgl
+		#   relativeGameDir="$processedName""$extension" #Game.ext
+		# fi
 
 		writeMgl
 	}
