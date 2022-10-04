@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source /media/fat/Scripts/rfid_util/rfid_neoGeo_games.sh
+source /media/fat/Scripts/rfid_util/neoGeo_games.sh
 
 write_rom() {
 
@@ -8,7 +8,7 @@ write_rom() {
 	#               Needed Vars               #
 	#==========================================
 	cardNumber="$1"
-	confFile=/media/fat/Scripts/rfid_util/game_list_rfid.conf
+	confFile=/media/fat/Scripts/rfid_util/game_list.conf
 	coreName=$(cat /tmp/CORENAME) #CORE
 	startPath=$(cat /tmp/STARTPATH)
 	fullPath=$(cat /tmp/FULLPATH) #games/CORE
