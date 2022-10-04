@@ -64,7 +64,7 @@ _This version allows you to assign games to cards without needing to edit the `r
 - Connect Arduino Nano
 - Open misterrfid.ino
 - Go to Tools -> Manage Libraries and search for MFRC522
-- Install MFRC522
+- Install Easy MFRC522
 - Verify Installation and Upload
 
 On your computer, attach the serial monitor to your Arduino and you should see it repeating `. rfid_process.sh noscan` about every second. As soon as your scan a RFID card, it should output `. rfid_process.sh 12345678`. The number is that card's unique ID. The reader will not scan the same card two times in a row. Make note of the card's unique id.
@@ -102,6 +102,8 @@ As you are gathering numbers from your cards or RFID tags, choose an RFID device
 ## MiSTer Setup
 
 Copy the files to your MiSTer SD card based on the structure of this repo. ATTENTION: Make sure you don't overwrite user-startup.sh if you have other services running like Favorites, Super Attract Mode or TTY2OLED. If you use TTY2OLED, make sure you assign the right ttydev to the right device.
+
+Edit MiSTer.ini and change `log_file_entry=0` to `log_file_entry=1`. This step allows `rfid_write.sh` to read the currently-playing game/core.
 
 #### Manually Adding Cores
 

@@ -1,32 +1,41 @@
 #!/bin/bash
 
 source /media/fat/Scripts/rfid_util/rfid_neoGeo_games.sh
+rootDirs=(
+	"/media/usb0/games"
+	"/media/usb1/games"
+	"/media/usb2/games"
+	"/media/usb3/games"
+	"/media/usb4/games"
+	"/media/usb5/games"
+	"/media/fat/cifs/games"
+	"/media/fat/games"
+)
+for d in ${rootDirs[@]}; do
+	if [ -d "$d" ]; then
+		gamesDir="$d"
+	fi
+done
 
 write_rom() {
 
 	#==========================================
-	#             Env Variables              #
+	#               Needed Vars               #
 	#==========================================
 	cardNumber="$1"
-	neoGeoName=""
-	mountType="f"
-	indexVal="0"
-	foundGame=""
-	misterCmd=/dev/MiSTer_cmd
 	confFile=/media/fat/Scripts/rfid_util/game_list_rfid.conf
 	coreName=$(cat /tmp/CORENAME) #CORE
 	startPath=$(cat /tmp/STARTPATH)
-	fullPath=$(cat /tmp/FULLPATH)         #games/CORE
-	game=$(cat /tmp/CURRENTPATH)          #Game
-	processedName=$(cat /tmp/CURRENTPATH) #Game temporary for testing
-	rootPath=/media/fat/
-	gameLocation="$rootPath""$fullPath"/"$game"             #/media/fat/games/CORE/Game #was absoluteGameDir
-	gameWithDir="$gameLocation"/"$game"                     #/media/fat/games/CORE/Game/Game
-	absoluteGamesDir="$rootPath""$fullPath"                 #/media/fat/games/CORE
-	rbfFile=_$(cat /tmp/STARTPATH | awk -F _ '{printf $2}') #_Folder/CORE
+	fullPath=$(cat /tmp/FULLPATH) #games/CORE
+	game=$(cat /tmp/CURRENTPATH)
+	fullCorePath="$gamesDir"/"$coreName"                    # /media/fat/games/CORE
+	fullGamePath="$fullCorePath"/"$game"                    # /media/fat/games/CORE/Game
+	coreFullGamesPath="$fullCorePath""$fullPath"            # /media/fat/games/CORE
+	rbfFile=_$(cat /tmp/STARTPATH | awk -F _ '{printf $2}') # _Folder/CORE
+	#=========================================#
 
 	findIt() {
-		foundGame=$(find "$absoluteGamesDir" -name "$1.*" -print) #/media/fat/games/CORE/Game
+		foundGame=$(find "$fullCorePath" -name "$1.*" -print) #/media/fat/games/CORE/Game
 	}
 
 	prepFinalPaths() {
@@ -34,9 +43,9 @@ write_rom() {
 		fullFoundGamePathNoExt="${fullFoundGamePath%.*}"
 		if [[ "$coreName" = NEOGEO ]]; then
 			processedName="$neoGeoName"
-			sedPath="$gameLocation".mgl
+			sedPath="$fullGamePath".mgl
 		else
-			processedName=$(echo "$fullFoundGamePathNoExt" | awk -F "$absoluteGamesDir"/ '{printf $2}')
+			processedName=$(echo "$fullFoundGamePathNoExt" | awk -F "$fullCorePath"/ '{printf $2}')
 			sedPath="$fullFoundGamePathNoExt".mgl
 		fi
 
@@ -132,32 +141,32 @@ write_rom() {
 						findIt "$neoGeoName"
 					fi
 				done
+			else
+				findIt "$game"
 			fi
 		}
 
 		isNeoGeo "$coreName"
-		if [[ $coreName != NEOGEO ]]; then
-			findIt "$game"
-		fi
+
 		extensionFinder "$coreName"
+
 		mglPreparer "$coreName"
+
 		prepFinalPaths
+
 	}
 
 	if [[ ${startPath} = *".mgl" ]]; then
 		return
 	fi
-
 	if [[ ${fullPath} != *_Arcade* ]]; then
 		prepareMgl
-
 	elif [[ ${fullPath} = *_Arcade* ]]; then
 		writeArcade
 
 	fi
-
 	sed -i "/$cardNumber/d" "$confFile"
-	sed -i "4i $cardNumber	echo load_core \"$sedPath\" > $misterCmd" "$confFile"
+	sed -i "4i $cardNumber	echo load_core \"$sedPath\" > /dev/MiSTer_Cmd" "$confFile"
 }
 
 write_rom "$1"
