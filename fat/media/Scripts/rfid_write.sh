@@ -2,6 +2,22 @@
 
 source /media/fat/Scripts/rfid_util/neoGeo_games.sh
 
+rootDirs=(
+	"/media/usb0/games"
+	"/media/usb1/games"
+	"/media/usb2/games"
+	"/media/usb3/games"
+	"/media/usb4/games"
+	"/media/usb5/games"
+	"/media/fat/cifs/games"
+	"/media/fat/games"
+)
+for d in ${rootDirs[@]}; do
+	if [ -d "$d" ]; then
+		gamesDir="$d"
+	fi
+done
+
 write_rom() {
 
 	#==========================================
