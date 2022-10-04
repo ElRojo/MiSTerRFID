@@ -50,22 +50,22 @@ write_rom() {
 			sedPath="$fullFoundGamePathNoExt".mgl
 		fi
 
-    relativeGameDir="$processedName""$extension"
+		relativeGameDir="$processedName""$extension"
 
-    writeMgl "$sedPath" "$relativeGameDir"
-  }
+		writeMgl "$sedPath" "$relativeGameDir"
+	}
 
-  writeMgl() {
-    if [ ! -f "$1" ]; then
-      echo "<mistergamedescription><rbf>"$rbfFile"</rbf><file delay=\"2\" type=\"$mountType\" index=\"$indexVal\" path=\""$2"\"/></mistergamedescription>" >"$1"
-    fi
-  }
+	writeMgl() {
+		if [ ! -f "$1" ]; then
+			echo "<mistergamedescription><rbf>"$rbfFile"</rbf><file delay=\"2\" type=\"$mountType\" index=\"$indexVal\" path=\""$2"\"/></mistergamedescription>" >"$1"
+		fi
+	}
 
-  writeArcade() {
-    sedPath="$startPath" #/media/fat/_Arcade/game.mra
-  }
+	writeArcade() {
+		sedPath="$startPath" #/media/fat/_Arcade/game.mra
+	}
 
-  prepareMgl() {
+	prepareMgl() {
 
 		extensionFinder() {
 			case $coreName in
@@ -111,29 +111,29 @@ write_rom() {
 			esac
 		}
 
-    mglPreparer() {
-      case $coreName in
-      "Amiga") mountType="f" indexVal=0 ;;
-      "ATARI5200") mountType="f" indexVal=1 ;;
-      "ATARI7800") mountType="f" indexVal=1 ;;
-      "ATARI800") mountType="f" ;;
-      "AtariLynx") mountType="f" indexVal=1 ;;
-      "C64") mountType="f" indexVal=1 ;;
-      "GAMEBOY" | "GAMEBOY2P") mountType="f" indexVal=0 ;;
-      "GBA" | "GBA2P") mountType="f" indexVal=0 ;;
-      "Genesis") mountType="f" indexVal=0 ;;
-      "MegaCD") mountType="s" indexVal=0 ;;
-      "NEOGEO") mountType="f" indexVal=1 ;;
-      "NES") mountType="f" indexVal=0 ;;
-      "S32X") mountType="f" indexVal=0 ;;
-      "SMS") mountType="f" indexVal=1 ;;
-      "SNES") mountType="f" indexVal=0 ;;
-      "TGFX16") mountType="f" indexVal=0 ;;
-      "TGFX16-CD") mountType="s" indexVal=0 ;;
-      "PSX") mountType="s" indexVal=1 ;;
-      *) mountType="f" indexVal=0 ;;
-      esac
-    }
+		mglPreparer() {
+			case $coreName in
+			"Amiga") mountType="f" indexVal=0 ;;
+			"ATARI5200") mountType="f" indexVal=1 ;;
+			"ATARI7800") mountType="f" indexVal=1 ;;
+			"ATARI800") mountType="f" ;;
+			"AtariLynx") mountType="f" indexVal=1 ;;
+			"C64") mountType="f" indexVal=1 ;;
+			"GAMEBOY" | "GAMEBOY2P") mountType="f" indexVal=0 ;;
+			"GBA" | "GBA2P") mountType="f" indexVal=0 ;;
+			"Genesis") mountType="f" indexVal=0 ;;
+			"MegaCD") mountType="s" indexVal=0 ;;
+			"NEOGEO") mountType="f" indexVal=1 ;;
+			"NES") mountType="f" indexVal=0 ;;
+			"S32X") mountType="f" indexVal=0 ;;
+			"SMS") mountType="f" indexVal=1 ;;
+			"SNES") mountType="f" indexVal=0 ;;
+			"TGFX16") mountType="f" indexVal=0 ;;
+			"TGFX16-CD") mountType="s" indexVal=0 ;;
+			"PSX") mountType="s" indexVal=1 ;;
+			*) mountType="f" indexVal=0 ;;
+			esac
+		}
 
 		isNeoGeo() {
 			if [[ ${1} = NEOGEO ]]; then
