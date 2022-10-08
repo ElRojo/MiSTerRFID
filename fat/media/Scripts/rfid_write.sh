@@ -111,8 +111,10 @@ write_rom() {
 			"ATARI800") mountType="f" ;;
 			"AtariLynx") mountType="f" indexVal=1 ;;
 			"C64") mountType="f" indexVal=1 ;;
-			"GAMEBOY" | "GAMEBOY2P") mountType="f" indexVal=0 ;;
-			"GBA" | "GBA2P") mountType="f" indexVal=0 ;;
+			"GAMEBOY") mountType="f" indexVal=0 ;;
+			"GAMEBOY2P") mountType="f" indexVal=0 ;;
+			"GBA") mountType="f" indexVal=0 ;;
+			"GBA2P") mountType="f" indexVal=0 ;;
 			"Genesis") mountType="f" indexVal=0 ;;
 			"MegaCD") mountType="s" indexVal=0 ;;
 			"NEOGEO") mountType="f" indexVal=1 ;;
