@@ -56,7 +56,7 @@ write_rom() {
 				*".gbc"*) extension=".gbc" ;;
 				*".gb"*) extension=".gb" ;;
 				esac ;;
-			"GBA") case "$foundGame" in
+			"GBA") case "$extFinder" in
 				*".gba"*) extension=".gba" ;;
 				esac ;;
 			"PSX") case "$extFinder" in
@@ -95,9 +95,11 @@ write_rom() {
 						processedName="$i"
 					fi
 				done
-			elif [[ "$1" = SNES ]]; then
+			elif [[ "$1" = SNES || Genesis ]]; then
 				game="${game%.*}"
 				processedName="$game"
+			else
+				return
 			fi
 		}
 
