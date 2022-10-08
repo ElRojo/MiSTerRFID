@@ -95,13 +95,12 @@ write_rom() {
     *) mountType="f" indexVal=0 ;;
     esac
 
-    echo "isDirRtn is equal to $isDirRtn before statement"
     if [ "$isDirRtn" -eq 0 ]; then
       sedPath="$gameWithDir".mgl                  #/media/fat/games/CORE/Game/Game.mgl
-      relativeGameDir="$game"/"$game""$extension" #Game/Game.ext
+      relativeGameDir="$game"/"${game%.*}""$extension" #Game/Game.ext
     else
-      sedPath="$gameLocation"/"$game".mgl         #/media/fat/games/CORE/Game.mgl
-      relativeGameDir="$processedName""$extension" #Game.ext
+      sedPath="$gameLocation"/"${game%.*}".mgl         #/media/fat/games/CORE/Game.mgl
+      relativeGameDir="${processedName%.*}""$extension" #Game.ext
     fi
 
     writeMgl
