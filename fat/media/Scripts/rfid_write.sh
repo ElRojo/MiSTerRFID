@@ -93,7 +93,7 @@ write_rom() {
         *".bin"*) extension=".bin" ;;
         *".bs"*) extension=".bs" ;;
         *".spc"*) extension=".spc" ;;
-        *".zip"*) extension".zip" ;;
+        *".zip"*) extension=".zip" ;;
         esac ;;
       "PSX") case "$foundGame" in
         *".cue"*) extension=".cue" ;;
