@@ -97,10 +97,10 @@ write_rom() {
 
     if [ "$isDirRtn" -eq 0 ]; then
       sedPath="$gameWithDir".mgl                  #/media/fat/games/CORE/Game/Game.mgl
-      relativeGameDir="$game"/"${game%.*}""$extension" #Game/Game.ext
+      relativeGameDir="$game"/"$game""$extension" #Game/Game.ext
     else
-      sedPath="$gameLocation"/"${game%.*}".mgl         #/media/fat/games/CORE/Game.mgl
-      relativeGameDir="${processedName%.*}""$extension" #Game.ext
+      sedPath="$gameLocation"/"$game".mgl         #/media/fat/games/CORE/Game.mgl
+      relativeGameDir="$processedName""$extension" #Game.ext
     fi
 
     writeMgl
