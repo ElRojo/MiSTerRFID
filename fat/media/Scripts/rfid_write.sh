@@ -99,7 +99,7 @@ write_rom() {
 				game="${game%.*}"
 				processedName="$game"
 			else
-				return
+				:
 			fi
 		}
 
