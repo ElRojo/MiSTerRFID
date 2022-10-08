@@ -10,7 +10,6 @@ write_rom() {
 	cardNumber="$1"
 	mountType="f"
 	indexVal="0"
-	misterCmd=/dev/MiSTer_cmd
 	confFile=/media/fat/Scripts/rfid_util/game_list.conf
 	coreName=$(cat /tmp/CORENAME) #CORE
 	startPath=$(cat /tmp/STARTPATH)
@@ -44,56 +43,97 @@ write_rom() {
 			fi
 		}
 
-		isNeoGeo() {
-			if [[ ${1} = NEOGEO ]]; then
+		extensionFinder() {
+			extFinder=$(ls -1 "$1"/)
+			case "$2" in
+			"Genesis") case "$extFinder" in
+				*".bin"*) extension=".bin" ;;
+				*".gen"*) extension=".gen" ;;
+				*".md"*) extension=".md" ;;
+				esac ;;
+			"GAMEBOY") case "$extFinder" in
+				*".bin"*) extension=".bin" ;;
+				*".gbc"*) extension=".gbc" ;;
+				*".gb"*) extension=".gb" ;;
+				esac ;;
+			"GBA") case "$foundGame" in
+				*".gba"*) extension=".gba" ;;
+				esac ;;
+			"PSX") case "$extFinder" in
+				*".cue"*) extension=".cue" ;;
+				*".chd"*) extension=".chd" ;;
+				esac ;;
+			"SGB") case "$extFinder" in
+				*".gbc"*) extension=".gbc" ;;
+				*".gb"*) extension=".gb" ;;
+				esac ;;
+			"SNES") case "$extFinder" in
+				*".sfc"*) extension=".sfc" ;;
+				*".smc"*) extension=".smc" ;;
+				*".bin"*) extension=".bin" ;;
+				*".bs"*) extension=".bs" ;;
+				*".spc"*) extension=".spc" ;;
+				*".zip"*) extension".zip" ;;
+				esac ;;
+			"MegaCD") case "$foundGame" in
+				*".cue"*) extension=".cue" ;;
+				*".chd"*) extension=".chd" ;;
+				esac ;;
+			*) case "$extFinder" in
+				*".srm"*) extension=".srm" ;;
+				*".neo"*) extension=".neo" ;;
+				*) extension="None Found!" ;;
+				esac ;;
+			*) extension="No core match!" ;;
+			esac
+		}
+
+		gameSanitizer() {
+			if [[ "$1" = NEOGEO ]]; then
 				for i in "${!neoGeoEnglish[@]}"; do
 					if [[ "$(echo "$game" | grep -w "${neoGeoEnglish[$i]}")" ]]; then #This code pulled from https://github.com/mrchrisster/MiSTer_SAM/blob/main/MiSTer_SAM_on.sh. Awesome idea!
 						processedName="$i"
 					fi
 				done
+			elif [[ "$1" = SNES ]]; then
+				game="${game%.*}"
+				processedName="$game"
 			fi
 		}
 
-		isNeoGeo "$coreName"
+		mglPreparer() {
+			case "$1" in
+			"Amiga") mountType="f" indexVal=0 ;;
+			"ATARI5200") mountType="f" indexVal=1 ;;
+			"ATARI7800") mountType="f" indexVal=1 ;;
+			"ATARI800") mountType="f" ;;
+			"AtariLynx") mountType="f" indexVal=1 ;;
+			"C64") mountType="f" indexVal=1 ;;
+			"GAMEBOY" | "GAMEBOY2P") mountType="f" indexVal=0 ;;
+			"GBA" | "GBA2P") mountType="f" indexVal=0 ;;
+			"Genesis") mountType="f" indexVal=0 ;;
+			"MegaCD") mountType="s" indexVal=0 ;;
+			"NEOGEO") mountType="f" indexVal=1 ;;
+			"NES") mountType="f" indexVal=0 ;;
+			"S32X") mountType="f" indexVal=0 ;;
+			"SMS") mountType="f" indexVal=1 ;;
+			"SNES") mountType="f" indexVal=0 ;;
+			"TGFX16") mountType="f" indexVal=0 ;;
+			"TGFX16-CD") mountType="s" indexVal=0 ;;
+			"PSX") mountType="s" indexVal=1 ;;
+			*) mountType="f" indexVal=0 ;;
+			esac
+		}
+
+		gameSanitizer "$coreName"
 
 		isDir "$gameLocation"
 
 		isDirRtn=$?
 
-		extFinder=$(ls -1 "$gameLocation"/)
-		case $extFinder in
-		*".cue"*) extension=".cue" ;;
-		*".chd"*) extension=".chd" ;;
-		*".sfc"*) extension=".sfc" ;;
-		*".smc"*) extension=".smc" ;;
-		*".gen"*) extension=".gen" ;;
-		*".neo"*) extension=".neo" ;;
-		*".nes"*) extension=".nes" ;;
-		*".md"*) extension=".md" ;;
-		*) unset extension ;;
-		esac
+		extensionFinder "$gameLocation" "$coreName"
 
-		case $coreName in
-		"Amiga") mountType="f" indexVal=0 ;;
-		"ATARI5200") mountType="f" indexVal=1 ;;
-		"ATARI7800") mountType="f" indexVal=1 ;;
-		"ATARI800") mountType="f" ;;
-		"AtariLynx") mountType="f" indexVal=1 ;;
-		"C64") mountType="f" indexVal=1 ;;
-		"GAMEBOY" | "GAMEBOY2P") mountType="f" indexVal=0 ;;
-		"GBA" | "GBA2P") mountType="f" indexVal=0 ;;
-		"Genesis") mountType="f" indexVal=0 ;;
-		"MegaCD") mountType="s" indexVal=0 ;;
-		"NEOGEO") mountType="f" indexVal=1 ;;
-		"NES") mountType="f" indexVal=0 ;;
-		"S32X") mountType="f" indexVal=0 ;;
-		"SMS") mountType="f" indexVal=1 ;;
-		"SNES") mountType="f" indexVal=0 ;;
-		"TGFX16") mountType="f" indexVal=0 ;;
-		"TGFX16-CD") mountType="s" indexVal=0 ;;
-		"PSX") mountType="s" indexVal=1 ;;
-		*) mountType="f" indexVal=0 ;;
-		esac
+		mglPreparer "$coreName"
 
 		if [ "$isDirRtn" -eq 0 ]; then
 			sedPath="$gameWithDir".mgl                  #/media/fat/games/CORE/Game/Game.mgl
@@ -119,7 +159,7 @@ write_rom() {
 	fi
 
 	sed -i "/$cardNumber/d" "$confFile"
-	sed -i "4i $cardNumber	echo load_core \"$sedPath\" > $misterCmd" "$confFile"
+	sed -i "4i $cardNumber	echo load_core \"$sedPath\" > /dev/MiSTer_cmd" "$confFile"
 }
 
 write_rom "$1"
