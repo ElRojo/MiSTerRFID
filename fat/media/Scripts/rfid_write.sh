@@ -169,7 +169,7 @@ write_rom() {
 
   fi
   sed -i "/$cardNumber/d" "$confFile"
-  sed -i "4i $cardNumber	echo load_core \"$sedPath\" > /dev/MiSTer_Cmd" "$confFile"
+  sed -i "4i $cardNumber	echo load_core \"$sedPath\" > /dev/MiSTer_cmd" "$confFile"
 }
 
 write_rom "$1"
