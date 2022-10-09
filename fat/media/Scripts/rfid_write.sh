@@ -37,7 +37,7 @@ write_rom() {
   #=========================================#
 
   findIt() {
-    foundGame=$(find "$fullCorePath" -name "$1.*" -print) #/media/fat/games/CORE/Game
+    foundGame=$(find "$fullCorePath" -name "$1.*" -type f -print) #/media/fat/games/CORE/Game
   }
 
   prepFinalPaths() {
