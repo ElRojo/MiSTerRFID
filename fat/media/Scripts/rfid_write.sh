@@ -244,4 +244,4 @@ write_rom() {
   sed -i "4i $cardNumber	echo load_core \"$sedPath\" > /dev/MiSTer_cmd" "$confFile"
 }
 
-write_rom "$1" >>/media/fat/Scripts/rfid_log.txt
+write_rom "$1"
