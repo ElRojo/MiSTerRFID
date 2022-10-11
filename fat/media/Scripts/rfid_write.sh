@@ -13,11 +13,11 @@ rootDirs=(
   "/media/fat/games"
 )
 
-for d in ${rootDirs[@]}; do
-  if [ -d "$d" ]; then
-    gamesDir="$d"
-  fi
-done
+# for d in ${rootDirs[@]}; do
+#   if [ -d "$d" ]; then
+#     gamesDir="$d"
+#   fi
+# done
 
 write_rom() {
 
@@ -28,26 +28,40 @@ write_rom() {
   confFile=/media/fat/Scripts/rfid_util/game_list.conf
   coreName=$(cat /tmp/CORENAME) #CORE
   startPath=$(cat /tmp/STARTPATH)
-  fullPath=$(cat /tmp/FULLPATH) #games/CORE
+  fullPath=$(cat /tmp/FULLPATH) #games/CORE/DIRIFEXISTS
+  rootPath=/media/fat
   game=$(cat /tmp/CURRENTPATH)
-  fullCorePath="$gamesDir"/"$coreName"                    # /media/fat/games/CORE
+  fullCorePath="$rootPath"/"$fullPath"                    # /media/fat/games/CORE
   fullGamePath="$fullCorePath"/"$game"                    # /media/fat/games/CORE/Game
   coreFullGamesPath="$fullCorePath""$fullPath"            # /media/fat/games/CORE
   rbfFile=_$(cat /tmp/STARTPATH | awk -F _ '{printf $2}') # _Folder/CORE
   #=========================================#
 
   findIt() {
-    foundGame=$(find "$fullCorePath" -name "$1.*" -type f -print) #/media/fat/games/CORE/Game
+    echo ""$game" game in findit"
+    echo ""$fullCorePath" full core path in findit"
+    foundGame=$(find "$fullCorePath" -name "$1*" -type f -print) #/media/fat/games/CORE/Game
+    echo ""$foundGame" found game after findit"
   }
 
   prepFinalPaths() {
-    fullFoundGamePath=$(echo "$foundGame" | grep -m 1 "$extension")
+    #picks a game out of list in case of multiple found results
+    if [[ "$hasExtension" = "0" ]]; then
+      fullFoundGamePath=$(echo "$foundGame" | grep -m 1 "$extension")
+      echo ""$fullFoundGamePath" <- fullFoundGamePath hasExtension = 0"
+    else
+      fullFoundGamePath="$fullGamePath"
+      echo ""$fullFoundGamePath" <- fullFoundGamePath hasExtension = 1"
+    fi
+
     fullFoundGamePathNoExt="${fullFoundGamePath%.*}"
+    echo ""$fullFoundGamePathNoExt" <- fullFoundGamePathNoExt"
+
     if [[ "$coreName" = NEOGEO ]]; then
       processedName="$neoGeoName"
       sedPath="$fullGamePath".mgl
     else
-      processedName=$(echo "$fullFoundGamePathNoExt" | awk -F "$fullCorePath"/ '{printf $2}')
+      processedName=$(echo "$fullFoundGamePathNoExt" | awk -F "$coreName"/ '{printf $2}')
       sedPath="$fullFoundGamePathNoExt".mgl
     fi
 
@@ -136,22 +150,80 @@ write_rom() {
       esac
     }
 
-    isNeoGeo() {
-      if [[ ${1} = NEOGEO ]]; then
-        for i in "${!neoGeoEnglish[@]}"; do
-          if [[ "$(echo "$game" | grep -w "${neoGeoEnglish[$i]}")" ]]; then #This code pulled from https://github.com/mrchrisster/MiSTer_SAM/blob/main/MiSTer_SAM_on.sh. Awesome idea!
-            neoGeoName="$i"
-            findIt "$neoGeoName"
-          fi
-        done
-      else
-        findIt "$game"
-      fi
+    neoGeoFileFixer() {
+      for i in "${!neoGeoEnglish[@]}"; do
+        if [[ "$(echo "$game" | grep -w "${neoGeoEnglish[$i]}")" ]]; then #This code pulled from https://github.com/mrchrisster/MiSTer_SAM/blob/main/MiSTer_SAM_on.sh. Awesome idea!
+          neoGeoName="$i"
+          findIt "$neoGeoName"
+        fi
+      done
     }
 
-    isNeoGeo "$coreName"
+    extensionChecker() {
+      case $1 in
+      "Genesis") case "$game" in
+        *".bin") hasExtension="1" extension=".bin" ;;
+        *".gen") hasExtension="1" extension=".gen" ;;
+        *".md") hasExtension="1" extension=".md" ;;
+        *) hasExtension="0" ;;
+        esac ;;
+      "GAMEBOY") case "$game" in
+        *".bin") hasExtension="1" extension=".bin" ;;
+        *".gbc") hasExtension="1" extension=".gbc" ;;
+        *".gb") hasExtension="1" extension=".gb" ;;
+        *) hasExtension="0" ;;
+        esac ;;
+      "GBA") case "$game" in
+        *".gba") hasExtension="1" extension=".gba" ;;
+        *) hasExtension="0" ;;
+        esac ;;
+      "SGB") case "$game" in
+        *".gbc") hasExtension="1" extension=".gbc" ;;
+        *".gb") hasExtension="1" extension=".gb" ;;
+        *) hasExtension="0" ;;
+        esac ;;
+      "SNES") case "$game" in
+        *".sfc") hasExtension="1" extension=".sfc" ;;
+        *".smc") hasExtension="1" extension=".smc" ;;
+        *".bin") hasExtension="1" extension=".bin" ;;
+        *".bs") hasExtension="1" extension=".bs" ;;
+        *".spc") hasExtension="1" extension=".spc" ;;
+        *".zip") hasExtension="1" extension=".zip" ;;
+        *) hasExtension="0" ;;
+        esac ;;
+      "PSX") case "$game" in
+        *".cue") hasExtension="1" extension=".cue" ;;
+        *".chd") hasExtension="1" extension=".chd" ;;
+        *) hasExtension="0" ;;
+        esac ;;
+      "MegaCD") case "$game" in
+        *".cue") hasExtension="1" extension=".cue" ;;
+        *".chd") hasExtension="1" extension=".chd" ;;
+        *) hasExtension="0" ;;
+        esac ;;
+      *) case "$game" in
+        *".srm") hasExtension="1" extension=".srm" ;;
+        *".neo") hasExtension="1" extension=".neo" ;;
+        *) hasExtension="0" ;;
+        esac ;;
+      *) hasExtension="No core match!" ;;
+      *) hasExtension="0" ;;
+      esac
 
-    extensionFinder "$coreName"
+    }
+    echo "kicking off"
+    if [[ ${1} = NEOGEO ]]; then
+      neoGeoFileFixer "$coreName"
+    fi
+
+    extensionChecker "$coreName"
+    echo ""$hasExtension" <- has extension"
+
+    findIt "$game"
+
+    if [[ "$hasExtension" = "0" ]]; then
+      extensionFinder "$coreName"
+    fi
 
     mglPreparer "$coreName"
 
@@ -172,4 +244,4 @@ write_rom() {
   sed -i "4i $cardNumber	echo load_core \"$sedPath\" > /dev/MiSTer_cmd" "$confFile"
 }
 
-write_rom "$1"
+write_rom "$1" >>/media/fat/Scripts/rfid_log.txt
