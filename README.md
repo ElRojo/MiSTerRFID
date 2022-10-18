@@ -34,7 +34,7 @@ If you find bugs, please report them as an issue if you run into any.
 - [Arduino Hardware Setup](#arduino-hardware-setup)
 - [Write Card Setup](#write-card-setup)
 - [MiSTer Setup](#mister-setup) 
-  - [Manually Adding Cores](#manually-adding-cores)
+  - [Manually Adding Cores](#manually-adding-cores-optional)
 - [Use](#use)
   - [Assigning Games to Cards](#assigning-games-to-cards)
 - [Known Issues](#known-issues)
