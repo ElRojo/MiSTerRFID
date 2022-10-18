@@ -1,28 +1,35 @@
 ![MiSTer connected to a MiSTerCade and RFID scanner](./B3953F61-7AEA-49E9-952C-9B12067D3B29.jpeg)
 
-
 Forked from: [javiwwweb/MisTerRFID](https://github.com/javiwwweb/MisTerRFID)
 Most of the ReadMe below is copy/paste from javiwwweb. I have added some notes for my changes.
 
-:heavy_exclamation_mark: ~~This code is built for use with games in the _Arcade folder. I may expand this further at a later date.~~ 
+:heavy_exclamation_mark: ~~This code is built for use with games in the \_Arcade folder. I may expand this further at a later date.~~
 
-Update 09/25/2022: This code *can* be used to run games other than Arcade cores. There is a caveat: you cannot use the "write" card method to add games. You **must** add games manually to the `rfid_process.sh` file. If you want to add a game, you must get the card number first, and then add a line such as this to the case statement:
+Update 09/25/2022: This code _can_ be used to run games other than Arcade cores, but you cannot use the write_card on a game that has been booted using an mgl file. You must boot through the menu core.
 
-`"123456789011") play "games/CONSOLEHERE/gamename.extension" ;;`
+Below are the currently supported file extensions/cores:
 
-Be aware that you *can* overwrite a card, though. If accidentally overwrite a card number by using the write card, you will indeed delete that line and need to re-add it.
+| Core    | Extension(s) |
+| ------- | ------------ |
+| PSX     | .cue .chd    |
+| SNES    | .sfc .smc    |
+| NES     | .nes         |
+| NeoGeo  | .neo         |
+| Genesis | .md .gen     |
+| Arcade  | .mra         |
 
+There may be bugs. Please report them as an issue if you run into any.
 :heavy_exclamation_mark:
 
 # Table of Contents
+
 - [TL;DR Instructions](#tldr)
 - [Hardware Needed](#hardware-needed)
 - [Arduino Hardware Setup](#arduino-hardware-setup)
 - [Write Card Setup](#write-card-setup)
-- [MiSTer Setup](#mister-setup)
+- [MiSTer Setup](#mister-setup) -[Manually Adding Cores](#manually-adding-cores)
 - [Use](#use)
-    - [Assigning Games to Cards](#assigning-games-to-cards)
-    - [Home Assistant Function](#home-assistant-function-optional)
+  - [Assigning Games to Cards](#assigning-games-to-cards)
 - [Known Issues](#known-issues)
 - [Troubleshooting](#troubleshooting)
 
@@ -51,9 +58,20 @@ _This version allows you to assign games to cards without needing to edit the `r
 | VCC              | 3.3V        |
 | GRD              | GRD         |
 
+## Arduino Software Setup
+
+- Download Arduino software
+- Connect Arduino Nano
+- Open misterrfid.ino
+- Go to Tools -> Manage Libraries and search for MFRC522
+- Install Easy MFRC522
+- Verify Installation and Upload
+
+On your computer, attach the serial monitor to your Arduino and you should see it repeating `. rfid_process.sh noscan` about every second. As soon as your scan a RFID card, it should output `. rfid_process.sh 12345678`. The number is that card's unique ID. The reader will not scan the same card two times in a row. Make note of the card's unique id.
+
 :warning: Skipping steps below will cause your code to not function! :warning:
 
-Install the `Easy MFRC522` library through your Arduino IDE. Write the misterrfid.ino file to your Arduino. If you find out that that you would like to extend the distance the card is picked up, You can adjust the receiver gain by editing line `21` of the `misterrfid.ino` and upload the code.
+If you find out that that you would like to extend the distance the card is picked up, You can adjust the receiver gain by editing line `21` of the `misterrfid.ino` and upload the code.
 
 ```
     rfid.PCD_SetRegisterBitMask(rfid.RFCfgReg, (0x03<<4)); // RFID Gain
@@ -79,91 +97,81 @@ As you are gathering numbers from your cards or RFID tags, choose an RFID device
 
 ```
   const uint32_t wCard = 123456789;
-
 ```
 
 ## MiSTer Setup
 
-Copy the files to your MiSTer SD card based on the structure of this repo. _(Optional)_ Edit case statement of the `rfid_process.sh` script. The line-structure is as follows:
+Copy the files to your MiSTer SD card based on the structure of this repo. ATTENTION: Make sure you don't overwrite user-startup.sh if you have other services running like Favorites, Super Attract Mode or TTY2OLED. If you use TTY2OLED, make sure you assign the right ttydev to the right device.
+
+Edit MiSTer.ini and change `log_file_entry=0` to `log_file_entry=1`. This step allows `rfid_write.sh` to read the currently-playing game/core.
+
+#### Manually Adding Cores
+
+Although the preferred method for adding games is by using the `write card`, you can manually add games to `game_list_rfid.conf` for unsupported files or if you find it easier/quicker.
+
+- Gather card numbers using the arduino serial monitor
+- If the game is an arcade core (.mra extension):
+  - use the absolute path for the .mra file. Please see the example below.
+- If the game is _not_ an arcade core:
+  - create an [mgl file](https://mister-devel.github.io/MkDocs_MiSTer/advanced/mgl/) for the game
+  - You can create these almost anywhere, but I recommend creating them the same place that `rfid_write.sh` would, which is: `/media/fat/games/CORE/GameFolder/Game.mgl` An example MGL is shown below. Note: the `GameFolder` doesn't exist for all cores.
+- Starting on line 4 of `game_list_rfid.conf` add games using the following format. Please be advised that the space between `CARDNUMBER` and `echo` is a TAB, not spaces.
+
+#### Manual Console Core Example
 
 ```
-case "$1" in
-"1234567890") play "Street Fighter II' Hyper Fighting -World 921209-" ;;
-esac
+CARDNUMBER	echo load_core "/absolute/path/to/rom/file.mgl" > /dev/MiSTer_cmd
+1452135431	echo load_core "/media/fat/games/PSX/Crash Bandicoot/Crash Bandicoot.mgl" > /dev/MiSTer_cmd
 ```
 
-Note that the roms need to be the filename only, without the extension (no .mra). Spaces are important and so are quotations. Take care when adding files this way.
+#### Manual Arcade Core Example
 
-:warning: When adding files manually be careful not to move the beginning of the `case` statement from line 13.:warning:
+```
+CARDNUMBER	echo load_core "/absolute/path/to/arcade/rom.mra" > /dev/MiSTer_cmd
+5132153135	echo load_core "/media/fat/_Arcade/1942.mra" > /dev/MiSTer_cmd
+```
 
-Doing so will cause the `rfid_write.sh` file to break. If you _do_ need to move the `case` block around, please check the comment in `rfid_write.sh` to move your injection point for creating new games."
+#### MGL Example
 
-This function is set up for \_Arcade games only, but can be easily adapted to other cores. I would suggest looking at [illusion-pasure-program](https://github.com/illusion-pasture-program/snesRFID)'s `original rfid_process.sh` file
+The filename of this example would be: `Crash Bandicoot.cue`
+
+The absolute filepath of this example would be: `/media/fat/games/PSX/Crash Bandicoot/Crash Bandicoot.cue`
+
+Relative to the games folder for the PSX core is: `Crash Bandicoot/Crash Bandicoot.cue`
+
+```
+<mistergamedescription>
+<rbf>_Console/PSX</rbf>
+<file delay="2" type="f" index="0" path="Crash Bandicoot/Crash Bandicoot.cue"/>
+</mistergamedescription>
+```
 
 ## Use
 
-After editing the `rfid_process.sh` script, turn off your MiSTer. Plug your Arduino into an available USB port on your USB board module and turn on your MiSTer. Depending on how many scripts you have running, it can take up to 30 seconds from first turning on the power to the RFID reader becoming available. Once the RFID is available, you can start lunching games (if you added cases to the `rfid_process.sh` file), or begin [Assigning Games to Cards](#Assigning-Games-to-Cards)
+- After editing the `rfid_process.sh` script, turn off your MiSTer. 
+- Plug your Arduino into an available USB port on your USB board module and turn on your MiSTer. Depending on how many scripts you have running, it can take up to 30 seconds from first turning on the power to the RFID reader becoming available. 
+- Once the RFID is available, you can start lunching games (if you added games to the `game_list_rfid.conf` file), or begin [Assigning Games to Cards](#Assigning-Games-to-Cards)
 
 Note: This can be combined with MisTer.ini option bootcore= to automatically launch an arcade core (MRA file) upon starting up your MisTer. The `rfid_process.sh` will run in the background waiting for a card to be presented.
 
 ## Assigning Games to Cards
 
-First, launch a game using the core menu. Once the game has booted, scan your `write card`. This will tell the Arduino that it needs to run the `rfid_write.sh` file on the next card scan. Scan a new (or already assigned) card. The card will be programaticaly added to `rfid_process.sh` and the next time you scan that card, it will boot the game. Remember that you cannot scan the same card twice, though. Scan a different card before scanning the just-written one in order to test it.
+- Launch a game using the core menu. Once the game has booted, scan your `write card`. This will tell the Arduino that it needs to run the `rfid_write.sh` file on the next card scan. 
+- Scan a new (or already assigned) card. The card will be programaticaly added to `game_list_rfid.conf` and the next time you scan that card, it will boot the game. 
+- Remember that you cannot scan the same card twice, though. Scan a different card before scanning the just-written one in order to test it. 
 
-_Cards can be overwritten. If you attempt to scan a card that is already added to the `rfid_process.sh` file, the entry will be deleted and then reassigned to the new game. You can do this as often as you'd like._
+_Cards can be overwritten. If you attempt to scan a card that is already added to the `game_list_rfid.sh` file, the entry will be deleted and then reassigned to the new game. You can do this as often as you'd like._
 
-
-## Home Assistant Function _(Optional)_
-
-In the `rfid_process.sh`, there's an `ha_cmd` function. It's an _extremely_ simple cUrl command that uses a bearer token and accepts a JSON string. It leverages the [Home Assistant API](https://www.home-assistant.io/integrations/api/). Please refer to the [Home Assistant API Docs](https://developers.home-assistant.io/docs/api/rest/) for detailed information. 
-
-You will need:
-- An API Token
-- API enabled in `configuration.yaml`
-- The URL of your instance + the necessary API action
-
-The quick and dirty version is as follows:
-
-- Log in to Home Assistant as your normal (admin) user
-- Go to settings > Users
-- Create a new user with:   
-  - A name like `LocalApiUser`
-  - A secure password
-  - Toggle the "Can only log in from the local network" to on
-- Log out or open a private window 
-- Log in to Home Assistant as the API User
-- In the bottom left, click on the profile icon
-- Scroll to "Long-Lived Access Tokens" and `Create Token`
-- name the token something memorable, and copy it down. You cannot see it again after closing the window.
-- Paste the token into the `TOKEN` variable in `rfid_process.sh` between the quotes.
-- Create cases using RFID cards that include the request and the `ha_cmd`. Example below:
-
-```
-ha_cmd() {
-        TOKEN="abcdefghijklmnop35920942029034809234ljflkjsalfkj"
-        curl -X POST -H "Authorization: Bearer $TOKEN" -H "Content-Type: application/json" -d $1 $2 
-}
-
-case "$1" in 
-"1234567890") ha_cmd {"entity_id":"light.living_room_lights"}' "http://homeassistant.local:8123/api/services/light/turn_off";;
-esac
-```
+_Games cannot be assigned/added when booted from an MGL file. You must do this process after booting from the Menu Core!_
 
 ## Known Issues
 
-~~Games with two spaces in the name are having one of the spaces removed as the game name is passed through the string manipulation logic.~~
-~~E.g.~~
-```
-Street Fighter II'  Champion Edition -World 920513- -> Street Fighter II' Champion Edition -World 920513-
-```
-~~This makes the MiSTer unable to find the rbf file. Some regex will probably fix this. I'll revisit it soon.~~
-
-This seems to be fixed.
+NeoGeo games must use the `.neo` extension. You cannot use a darksoft roll-up without converting to `.neo`. This is a limitation from `.mgl` files and how they load.
 
 ## Troubleshooting
 
 - If your cards don't seem to be scanning in MiSTer, make sure that `serial_listen.sh` actually started. I have had issues with that not booting in the past. Re-imaging my SD card takes care of this if nothing else.
-- If games aren't being added to the right spot, or being injected in odd places in `rfid_process.sh` make sure you didn't inadvertently move the `case` statement. Read [MiSTer Setup](#MiSTer-Setup).
+- If games aren't being added to the right spot, or being injected in odd places in `rfid_process.sh` make sure you respected the format into `game_list_rfid.conf`. Read [MiSTer Setup](#MiSTer-Setup).
 - If your write card doesn't function. Make sure you added the card number to the Arduino code **and** re-uploaded after making that change.
 
 ## TL;DR
@@ -186,8 +194,7 @@ This seems to be fixed.
 - Re-write to the arduino
 - Add Scripts files to the `Scripts` folder on the MiSTer, as well as the linux file
 
-
-
 ### THANK YOU
 
 _Thanks to illusion-pasture-program and javiwwweb for the initial code and ideas._
+_Thanks to @[mrchrisster](https://github.com/mrchrisster) for their clarifications in the ReadMe and @[coded-with-claws](https://github.com/coded-with-claws) for their contribution for the new `rfid_process.sh` code!_
