@@ -114,7 +114,7 @@ Copy the files to your MiSTer SD card based on the structure of this repo from t
 
 Edit MiSTer.ini and change `log_file_entry=0` to `log_file_entry=1`. This step allows `rfid_write.sh` to read the currently-playing game/core.
 
-#### Manually Adding Cores
+#### Manually Adding Cores _(Optional)_
 
 Although the preferred method for adding games is by using the `write card`, you can manually add games to `game_list.conf` for unsupported files or if you find it easier/quicker.
 
