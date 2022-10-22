@@ -71,7 +71,7 @@ _This version allows you to assign games to cards without needing to edit the `r
 
 - Download Arduino software
 - Connect Arduino Nano
-- Open misterrfid.ino
+- Open arduino/misterrfid.ino
 - Go to Tools -> Manage Libraries and search for MFRC522
 - Install Easy MFRC522
 - Verify Installation and Upload
@@ -80,7 +80,7 @@ On your computer, attach the serial monitor to your Arduino and you should see i
 
 :warning: Skipping steps below will cause your code to not function! :warning:
 
-If you find out that that you would like to extend the distance the card is picked up, You can adjust the receiver gain by editing line `21` of the `misterrfid.ino` and upload the code.
+If you find out that that you would like to extend the distance the card is picked up, You can adjust the receiver gain by editing line `21` of the `arduino/misterrfid.ino` and upload the code.
 
 ```
     rfid.PCD_SetRegisterBitMask(rfid.RFCfgReg, (0x03<<4)); // RFID Gain
@@ -102,7 +102,7 @@ On your computer, attach the serial monitor to your Arduino and you should see i
 
 ### Write Card Setup
 
-As you are gathering numbers from your cards or RFID tags, choose an RFID device that you'd like to use as a `write card` This card acts as a trigger to put your Arduino code into a loop that will run the `rfid_write.sh` file. The number of this RFID device needs to be replace `12346789` in `misterrfid.ino` at line `4`. After you have done this, overwrite your Arduino with the new code. Set that card aside for later.
+As you are gathering numbers from your cards or RFID tags, choose an RFID device that you'd like to use as a `write card` This card acts as a trigger to put your Arduino code into a loop that will run the `rfid_write.sh` file. The number of this RFID device needs to be replace `12346789` in `arduino/misterrfid.ino` at line `4`. After you have done this, overwrite your Arduino with the new code. Set that card aside for later.
 
 ```
 #define WRITE_TAG 1234567890
@@ -110,9 +110,9 @@ As you are gathering numbers from your cards or RFID tags, choose an RFID device
 
 ## MiSTer Setup
 
-Copy the files to your MiSTer SD card based on the structure of this repo from the `fat/media` folder. ATTENTION: Make sure you don't overwrite user-startup.sh if you have other services running like Favorites, Super Attract Mode or TTY2OLED. If you use TTY2OLED, make sure you assign the right ttydev to the right device.
+Copy `rfid_updater.sh` to `/media/fat/Scripts`. Boot your mister, and run `rfid_updater.sh` from the Scripts folder. Continue to [Use](#use) when this is done.
 
-Edit MiSTer.ini and change `log_file_entry=0` to `log_file_entry=1`. This step allows `rfid_write.sh` to read the currently-playing game/core.
+Note: If you use TTY2OLED, make sure you assign the right ttydev to the right device.
 
 #### Manually Adding Cores _(Optional)_
 
@@ -157,7 +157,7 @@ Relative to the games folder for the PSX core is: `Crash Bandicoot/Crash Bandico
 
 ## Use
 
-- After making any changes or uploading files to your MiSTer, power it down. 
+- After running `rfid_updater.sh`, making any changes, or uploading files to your MiSTer, power it down. 
 - Plug your Arduino into an available USB port on your USB board module and turn on your MiSTer. Depending on how many scripts you have running, it can take up to 30 seconds from first turning on the power to the RFID reader becoming available. 
 - Once the RFID is available, you can start lunching games (if you added games to the `game_list.conf` file), or begin [Assigning Games to Cards](#Assigning-Games-to-Cards)
 
@@ -179,19 +179,21 @@ NeoGeo games must use the `.neo` extension. You cannot use a darksoft roll-up wi
 
 ## Troubleshooting
 
+- Check that your MiSTer.ini file(s) has `log_file_entry=1`
 - If your cards don't seem to be scanning in MiSTer, make sure that `serial_listen.sh` actually started. I have had issues with that not booting in the past. Re-imaging my SD card takes care of this if nothing else.
 - If games aren't being added to the right spot, or being injected in odd places in `game_list.conf` make sure you respected the format into `game_list.conf`. Read [MiSTer Setup](#MiSTer-Setup).
 - If your write card doesn't function. Make sure you added the card number to the Arduino code **and** re-uploaded after making that change.
+
 
 ## TL;DR
 
 - Set up your Arduino and MFRC522 using: [Arduino Hardware Setup](#Arduino-Hardware-Setup)
 - Write the code to the Arduino
 - Pick a card to be the `write card` and jot down the number
-- Replace the value for `const uint32_t wCard` in `misterrfid.ino` with your card number
+- Replace the value for `WRITE_TAG` in `arduino/misterrfid.ino` with your card number
 - Re-write to the arduino
-- Add Scripts files to the `Scripts` folder on the MiSTer, as well as the linux file
-- Edit MiSTer.ini and change `log_file_entry=0` to `log_file_entry=1`.
+- Add rfid_updater.sh to Scripts folder and run it.
+- Reboot your MiSTer
 
 ### THANK YOU
 
