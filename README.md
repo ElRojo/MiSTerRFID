@@ -24,7 +24,7 @@ Below are the currently supported cores:
 |PSX|
 
 
-If you find bugs, please report them as an issue if you run into any.
+Please report any bugs as an issue if you run into any.
 
 
 # Table of Contents
