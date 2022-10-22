@@ -218,3 +218,4 @@ write_rom() {
 }
 
 write_rom "$1"
+mpg123 -q /media/fat/Scripts/rfid_util/rfid_write.mp3

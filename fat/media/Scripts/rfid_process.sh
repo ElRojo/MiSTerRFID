@@ -17,5 +17,6 @@ if [ "x$gamefound" == "x" ]; then
 fi
 
 echo "Running: $gamefound"
+mpg123 -q /media/fat/Scripts/rfid_util/rfid_process.mp3
 eval "$gamefound"
 ##
