@@ -89,13 +89,15 @@ mister_log_enabler() {
 }
 
 user_startup() {
-    userStartupLine=$(grep -n "screen -d -m -t rfid sh /media/fat/Scripts/serial_listen.sh" ${USER_STARTUP})
-    if [[ -e ${USER_STARTUP} && ${userStartupLine} != *"screen -d -m -t rfid"* ]]; then
-        echo -e "user-startup.sh exists, adding rfid line..."
-        echo "screen -d -m -t rfid sh /media/fat/Scripts/serial_listen.sh" >>${USER_STARTUP}
-    elif [[ ! -e ${USER_STARTUP} ]]; then
+    if [ ! -e ${USER_STARTUP} ]; then
         echo -e "user-startup.sh not found.\n"
         create_user_startup
+    else
+        userStartupLine=$(grep -n "screen -d -m -t rfid sh /media/fat/Scripts/serial_listen.sh" ${USER_STARTUP})
+    fi
+    if [[ $userStartupLine != *"screen -d -m -t rfid"* ]]; then
+        echo -e "user-startup.sh exists, adding rfid line..."
+        echo "screen -d -m -t rfid sh /media/fat/Scripts/serial_listen.sh" >>${USER_STARTUP}
     fi
 }
 
@@ -116,5 +118,6 @@ mister_rfid
 mister_log_enabler
 user_startup
 echo -e "\nComplete!"
+echo -e "Power off your MiSTER, plug in your RFID reader,\nand power the MiSTER back on to begin using it!\n"
 sleep 2
 exit 0
