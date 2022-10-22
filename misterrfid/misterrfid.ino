@@ -1,6 +1,7 @@
 #include <MFRC522.h>
 #include <SPI.h>
 
+#define WRITE_TAG 1234567890
 #define SS_PIN 10
 #define RST_PIN 9
 
@@ -46,8 +47,12 @@ void loop() {
 
 void cardLogic(String proc, uint32_t cardNum) {
   digitalWrite(LED_BUILTIN, HIGH);
-  Serial.print(proc);
-  Serial.println(cardNum);
+  if (cardNum != WRITE_TAG) {
+    Serial.print(proc);
+    Serial.println(cardNum);
+  } else {
+    Serial.println(proc);
+  }
   lastCardRead = cardNum;
   delay(1000); 
   digitalWrite(LED_BUILTIN, LOW);
@@ -55,7 +60,7 @@ void cardLogic(String proc, uint32_t cardNum) {
 
 void readRFID()
 {
-  const uint32_t wCard = 1234567890; // Writing Card
+  const uint32_t wCard = WRITE_TAG; // Writing Card
   rfid.PICC_ReadCardSerial();
   MFRC522::PICC_Type piccType = rfid.PICC_GetType(rfid.uid.sak);
 
@@ -76,7 +81,10 @@ void readRFID()
 
   cardBeenRead = 1;
 
-  if (lastCardRead == wCard && cardid != wCard) {
+  if (lastCardRead != wCard && cardid == wCard) {
+    cardLogic("mpg123 /media/fat/Scripts/rfid_util/write_tag.mp3", cardid);
+  }
+  else if (lastCardRead == wCard && cardid != wCard) {
     cardLogic(". rfid_write.sh ", cardid);
   }
   else if (cardid != lastCardRead) {
