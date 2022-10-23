@@ -123,7 +123,7 @@ Although the preferred method for adding games is by using the `write card`, you
   - use the absolute path for the .mra file. Please see the example below.
 - If the game is _not_ an arcade core:
   - create an [mgl file](https://mister-devel.github.io/MkDocs_MiSTer/advanced/mgl/) for the game
-  - You can create these almost anywhere, but I recommend creating them the same place that `rfid_write.sh` would, which could be: `/media/fat/games/CORE/GameFolder/Game.mgl` An example MGL is shown below. Note: the `GameFolder` doesn't exist for all cores and is dependent on your directory heirarchy.
+  - You can create these almost anywhere, but I recommend creating them the same place that `rfid_write.sh` would, which could be: `/media/fat/games/CORE/GameFolder/Game.mgl` An example MGL is shown below. Note: the `GameFolder` doesn't exist for all cores and is dependent on your directory hierarchy.
 - Starting on line 4 of `game_list.conf` add games using the following format. Please be advised that the space between `CARDNUMBER` and `echo` is a TAB, not spaces.
 
 #### Manual Console Core Example
@@ -166,7 +166,7 @@ Note: This can be combined with MisTer.ini option bootcore= to automatically lau
 ## Assigning Games to Cards
 
 - Launch a game using the core menu. Once the game has booted, scan your `write card`. This will tell the Arduino that it needs to run the `rfid_write.sh` file on the next card scan. 
-- Scan a new (or already assigned) card. The card will be programaticaly added to `game_list.conf` and the next time you scan that card, it will boot the game. 
+- Scan a new (or already assigned) card. The card will be programmatically added to `game_list.conf` and the next time you scan that card, it will boot the game. 
 - Remember that you cannot scan the same card twice, though. Scan a different card before scanning the just-written one in order to test it. 
 
 _Cards can be overwritten. If you attempt to scan a card that is already added to the `game_list.conf` file, the entry will be deleted and then reassigned to the new game. You can do this as often as you'd like._
@@ -182,7 +182,7 @@ NeoGeo games must use the `.neo` extension. You cannot use a darksoft roll-up wi
 - Check that your MiSTer.ini file(s) has `log_file_entry=1`
 - If your cards don't seem to be scanning in MiSTer, make sure that `serial_listen.sh` actually started. I have had issues with that not booting in the past. Re-imaging my SD card takes care of this if nothing else.
 - If games aren't being added to the right spot, or being injected in odd places in `game_list.conf` make sure you respected the format into `game_list.conf`. Read [MiSTer Setup](#MiSTer-Setup).
-- If your write card doesn't function. Make sure you added the card number to the Arduino code **and** re-uploaded after making that change.
+- If your write card doesn't function, make sure you added the card number to the Arduino code **and** re-uploaded after making that change.
 
 
 ## Quick Start
