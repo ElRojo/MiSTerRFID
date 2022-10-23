@@ -74,7 +74,7 @@
         echo "Enabling log_file_entry in MiSTer.ini"
         echo -e "############################################################\n"
         sed -i "s/log_file_entry=0/log_file_entry=1/g" "/media/fat/MiSTer.ini"
-        ECHO "Enabled in MiSTer.ini"
+        echo "Enabled in MiSTer.ini"
         if [ -e "/media/fat/MiSTer_alt_1.ini" ]; then
             echo -e "\n############################################################"
             echo "Enabling log_file_entry in alt ini files."
