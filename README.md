@@ -29,7 +29,7 @@ Please report any bugs as an issue if you run into any.
 
 # Table of Contents
 
-- [TL;DR Instructions](#tldr)
+- [Quick Start Guide](#quick-start)
 - [Hardware Needed](#hardware-needed)
 - [Arduino Hardware Setup](#arduino-hardware-setup)
 - [Write Card Setup](#write-card-setup)
@@ -185,15 +185,15 @@ NeoGeo games must use the `.neo` extension. You cannot use a darksoft roll-up wi
 - If your write card doesn't function. Make sure you added the card number to the Arduino code **and** re-uploaded after making that change.
 
 
-## TL;DR
+## Quick Start
 
 - Set up your Arduino and MFRC522 using: [Arduino Hardware Setup](#Arduino-Hardware-Setup)
 - Write the code to the Arduino
-- Pick a card to be the `write card` and jot down the number
+- Pick a card to be the `write card`, scan it with the serial listener open, and jot down the number
 - Replace the value for `WRITE_TAG` in `arduino/misterrfid.ino` with your card number
 - Re-write to the arduino
 - Add rfid_updater.sh to Scripts folder and run it.
-- Reboot your MiSTer
+- Follow the [Use](#use) section
 
 ### THANK YOU
 
