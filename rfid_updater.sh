@@ -111,7 +111,7 @@
             echo 'screen -d -m -t rfid sh /media/fat/Scripts/serial_listen.sh'
         } >>${USER_STARTUP}
     }
-    echo -e "############################################################\n\nThanks for using MiSTer RFID!\nPlease report any bugs here:\nhttps://github.com/ElRojo/MiSTerRFID/issues\n\n############################################################\n"
+    echo -e "========================================================\n\nThanks for using MiSTer RFID!\nPlease report any bugs here:\nhttps://github.com/ElRojo/MiSTerRFID/issues\n\n========================================================\n"
     sleep 2
     mister_rfid
     mister_log_enabler
