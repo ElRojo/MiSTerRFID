@@ -115,6 +115,7 @@
     mister_log_enabler
     user_startup
     for i in "${UPDATER_DOWNLOAD[@]}"; do
+        echo ""
         curler "${SCRIPT_PATH}" "${REPOSITORY_URL}/main/${i}"
     done
     echo -e "\nComplete!\n"
