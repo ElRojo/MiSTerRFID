@@ -192,7 +192,7 @@ NeoGeo games must use the `.neo` extension. You cannot use a darksoft roll-up wi
 - Pick a card to be the `write card`, scan it with the serial listener open, and jot down the number
 - Replace the value for `WRITE_TAG` in `arduino/misterrfid.ino` with your card number
 - Re-write to the arduino
-- Add rfid_updater.sh to Scripts folder and run it.
+- Add `rfid_updater.sh` to Scripts folder and run it.
 - Follow the [Use](#use) section
 
 ### THANK YOU
