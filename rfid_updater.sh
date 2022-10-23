@@ -85,6 +85,7 @@
                     echo "Enabled in MiSTer_alt_$i.ini"
                 fi
             done
+            echo -e "############################################################\n"
         fi
     }
 
