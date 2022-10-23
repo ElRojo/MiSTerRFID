@@ -8,7 +8,7 @@ while ! [ -c "${ttydev}" ] && [ ${SECONDS} -lt ${WAITEND} ]; do
 done
 
 if [ -c "${ttydev}" ]; then
-	export PATH="/media/fat/Scripts:$PATH"
+	export PATH="/media/fat/Scripts/rfid_util:$PATH"
 	stty 9600 -F "${ttydev}" raw -echo
 	bash <"${ttydev}"
 fi
