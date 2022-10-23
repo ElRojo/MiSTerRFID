@@ -80,7 +80,7 @@
             echo "Enabling log_file_entry in alt ini files."
             echo -e "############################################################\n"
             for ((i = 1; i < 4; i++)); do
-                if [ -e /media/fat/MiSTer_alt_${i}.ini ]; then
+                if [ -e "/media/fat/MiSTer_alt_$i.ini" ]; then
                     sed -i "s/log_file_entry=0/log_file_entry=1/g" "/media/fat/MiSTer_alt_$i.ini"
                     echo "Enabled in MiSTer_alt_$i.ini"
                 fi
