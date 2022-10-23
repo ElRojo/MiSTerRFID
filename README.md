@@ -80,7 +80,7 @@ On your computer, attach the serial monitor to your Arduino and you should see i
 
 :warning: Skipping steps below will cause your code to not function! :warning:
 
-If you find out that that you would like to extend the distance the card is picked up, You can adjust the receiver gain by editing line `21` of the `arduino/misterrfid.ino` and upload the code.
+If you find out that that you would like to extend the distance the card is picked up, You can adjust the receiver gain by editing line `22` of the `arduino/misterrfid.ino` and upload the code.
 
 ```
     rfid.PCD_SetRegisterBitMask(rfid.RFCfgReg, (0x03<<4)); // RFID Gain
@@ -102,7 +102,7 @@ On your computer, attach the serial monitor to your Arduino and you should see i
 
 ### Write Card Setup
 
-As you are gathering numbers from your cards or RFID tags, choose an RFID device that you'd like to use as a `write card` This card acts as a trigger to put your Arduino code into a loop that will run the `rfid_write.sh` file. The number of this RFID device needs to be replace `12346789` in `arduino/misterrfid.ino` at line `4`. After you have done this, overwrite your Arduino with the new code. Set that card aside for later.
+As you are gathering numbers from your cards or RFID tags, choose an RFID device that you'd like to use as a `write card` This card acts as a trigger to put your Arduino code into a loop that will run the `rfid_write.sh` file. The number of this RFID device needs to be replaced: `12346789` in `arduino/misterrfid.ino` at line `4`. After you have done this, overwrite your Arduino with the new code. Set that card aside for later.
 
 ```
 #define WRITE_TAG 1234567890
