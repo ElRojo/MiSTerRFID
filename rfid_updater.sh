@@ -124,7 +124,7 @@
         curler "${SCRIPT_PATH}.new" "${REPOSITORY_URL}/main/${i}"
     done
     mv ${SCRIPT_PATH}.new ${SCRIPT_PATH}
-    echo -e "\nComplete!\n"
+    echo -e "\n🎉Complete!🎉\n"
     echo -e "Power off your MiSTER, plug in your RFID reader,\nand power the MiSTER back on to begin using it!\n"
     sleep 2
     exit 0
