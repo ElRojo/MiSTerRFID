@@ -8,6 +8,7 @@
     UPDATER_DOWNLOAD=("rfid_updater.sh")
     ROOT_DOWNLOADS=("rfid_process.sh" "rfid_write.sh" "serial_listen.sh")
     UTIL_DOWNLOADS=("game_list.conf" "neoGeo_games.sh" "rfid_write.mp3" "rfid_process.mp3" "write_tag.mp3")
+    REPOSITORY_URL="https://raw.githubusercontent.com/ElRojo/MiSTerRFID"
     USER_STARTUP=/media/fat/linux/user-startup.sh
     LOGFILE=/media/fat/Scripts/rfid_util/rfid_log.txt
 
@@ -48,7 +49,6 @@
             ;;
         esac
 
-        REPOSITORY_URL="https://raw.githubusercontent.com/ElRojo/MiSTerRFID"
         echo "Starting download..."
         echo -e "${REPOSITORY_URL}\n"
         for i in "${ROOT_DOWNLOADS[@]}"; do
@@ -114,8 +114,8 @@
     mister_rfid
     mister_log_enabler
     user_startup
-    for i in "${UPDATER_DOWNLOAD}"; do
-        curler "${SCRIPT_PATH}" "${REPOSITORY_URL}/main/${SCRIPT_PATH}"
+    for i in "${UPDATER_DOWNLOAD[@]}"; do
+        curler "${SCRIPT_PATH}" "${REPOSITORY_URL}/main/${i}"
     done
     echo -e "\nComplete!\n"
     echo -e "Power off your MiSTER, plug in your RFID reader,\nand power the MiSTER back on to begin using it!\n"
