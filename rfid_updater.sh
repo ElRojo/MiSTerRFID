@@ -116,8 +116,9 @@
     user_startup
     for i in "${UPDATER_DOWNLOAD[@]}"; do
         echo ""
-        curler "${SCRIPT_PATH}" "${REPOSITORY_URL}/main/${i}"
+        curler "${SCRIPT_PATH}.new" "${REPOSITORY_URL}/main/${i}"
     done
+    mv ${SCRIPT_PATH}.new ${SCRIPT_PATH}
     echo -e "\nComplete!\n"
     echo -e "Power off your MiSTER, plug in your RFID reader,\nand power the MiSTER back on to begin using it!\n"
     sleep 2
