@@ -1,7 +1,9 @@
 #!/bin/bash
-#v1.0.3
+#v1.0.4
 TXTBOLD=$(tput bold)
+TCTBLINK=$(tput blink)
 TXTNORMAL=$(tput sgr0)
+TXTUNDERLINE=$(tput smul)
 CURL_RETRY="--connect-timeout 15 --max-time 600 --retry 3 --retry-delay 5"
 ALLOW_INSECURE_SSL="true"
 SCRIPT_PATH=/media/fat/Scripts/rfid_updater.sh
@@ -51,15 +53,15 @@ mister_rfid() {
         ;;
     esac
 
-    echo "Starting download..."
-    echo -e "${REPOSITORY_URL}\n"
+    echo "${TXTBLINK}Starting download...${TXTNORMAL}"
+    echo -e "${TXTUNDERLINE}${REPOSITORY_URL}${TXTNORMAL}\n"
     for i in "${DOWNLOADS[@]}"; do
         curler ""${SCRIPTS_FOLDER}/rfid_util"/"${i}"" "${REPOSITORY_URL}/${BRANCH}/fat/media/Scripts/rfid_util/${i}"
     done
 }
 
 curler() {
-    echo "Downloading ${i}"
+    echo -e "\033[2m- Downloading ${i}\033[0m"
     curl \
         ${CURL_RETRY} --silent --show-error \
         ${SSL_SECURITY_OPTION} \
@@ -73,7 +75,7 @@ mister_log_enabler() {
     echo "${TXTBOLD}Enabling log_file_entry in MiSTer.ini${TXTNORMAL}"
     echo -e "############################################################\n"
     sed -i "s/log_file_entry=0/log_file_entry=1/g" "/media/fat/MiSTer.ini"
-    echo "Enabled in MiSTer.ini"
+    echo -e "\033[2m- Enabled in MiSTer.ini\033[0m"
     if [ -e "/media/fat/MiSTer_alt_1.ini" ]; then
         echo -e "\n############################################################"
         echo "${TXTBOLD}Enabling log_file_entry in alt ini files.${TXTNORMAL}"
@@ -81,7 +83,7 @@ mister_log_enabler() {
         for ((i = 1; i < 4; i++)); do
             if [ -e "/media/fat/MiSTer_alt_$i.ini" ]; then
                 sed -i "s/log_file_entry=0/log_file_entry=1/g" "/media/fat/MiSTer_alt_$i.ini"
-                echo "Enabled in MiSTer_alt_$i.ini"
+                echo -e "\033[2m- Enabled in MiSTer_alt_$i.ini\033[0m"
             fi
         done
         echo -e "\n############################################################\n"
@@ -137,7 +139,7 @@ old_cleanup() {
 
 }
 
-echo -e "========================================================\n\n${TXTBOLD}Thanks for using MiSTer RFID!${TXTNORMAL}\nPlease report any bugs here:\nhttps://github.com/ElRojo/MiSTerRFID/issues\n\n========================================================\n"
+echo -e "========================================================\n\n${TXTBOLD}Thanks for using MiSTer RFID!${TXTNORMAL}\nPlease report any bugs here:\n${TXTUNDERLINE}https://github.com/ElRojo/MiSTerRFID/issues${TXTNORMAL}\n\n========================================================\n"
 sleep 2
 mister_rfid
 mister_log_enabler
