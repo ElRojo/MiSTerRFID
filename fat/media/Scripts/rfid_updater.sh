@@ -17,6 +17,7 @@ update_updater() {
     echo ""
     curler "/media/fat/Scripts/rfid_util/update.sh" "https://raw.githubusercontent.com/ElRojo/MiSTerRFID/${BRANCH}/fat/media/Scripts/rfid_util/update.sh"
 }
+echo "Downloading latest update file..."
 if [ -e /media/fat/Scripts/rfid_util/update.sh ]; then
     rm /media/fat/Scripts/rfid_util/update.sh
 fi
