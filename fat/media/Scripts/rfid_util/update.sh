@@ -10,7 +10,7 @@ DOWNLOADS=("game_list.conf" "neoGeo_games.sh" "rfid_write.mp3" "rfid_process.mp3
 REPOSITORY_URL="https://raw.githubusercontent.com/ElRojo/MiSTerRFID"
 USER_STARTUP=/media/fat/linux/user-startup.sh
 LOGFILE=/media/fat/Scripts/rfid_util/rfid_log.txt
-BRANCH="updating-updater"
+BRANCH="main"
 
 mister_rfid() {
     if [ -e "/media/fat/Scripts/rfid_util" ]; then
