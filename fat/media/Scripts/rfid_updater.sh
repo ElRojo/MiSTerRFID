@@ -4,7 +4,6 @@ SSL_SECURITY_OPTION=""
 BRANCH="updating-updater"
 
 curler() {
-    echo "Downloading ${i}"
     curl \
         ${CURL_RETRY} --silent --show-error \
         ${SSL_SECURITY_OPTION} \
@@ -44,6 +43,7 @@ case $? in
 esac
 update_updater
 source /media/fat/Scripts/rfid_util/update.sh
+wait
 rm /media/fat/Scripts/rfid_util/update.sh
 echo -e "\nComplete!\n"
 echo -e "Power off your MiSTER, plug in your RFID reader,\nand power the MiSTER back on to begin using it!\n"

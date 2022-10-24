@@ -1,5 +1,5 @@
 #!/bin/bash
-#v1.0.1
+#v1.0.2
 CURL_RETRY="--connect-timeout 15 --max-time 600 --retry 3 --retry-delay 5"
 ALLOW_INSECURE_SSL="true"
 SCRIPT_PATH=/media/fat/Scripts/rfid_updater.sh
