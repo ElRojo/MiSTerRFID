@@ -1,5 +1,5 @@
 #!/bin/bash
-#v1.0.2
+#v1.0.3
 TXTBOLD=$(tput bold)
 TXTNORMAL=$(tput sgr0)
 CURL_RETRY="--connect-timeout 15 --max-time 600 --retry 3 --retry-delay 5"
