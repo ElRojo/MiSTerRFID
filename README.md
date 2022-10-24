@@ -3,29 +3,26 @@
 Forked from: [javiwwweb/MisTerRFID](https://github.com/javiwwweb/MisTerRFID)
 Most of the ReadMe below is copy/paste from javiwwweb. I have added some notes for my changes.
 
-
 Below are the currently supported cores:
 
-| Core    |
-| ------- | 
-|Amiga|
-|Atari 5200,7800,800,Lynx|
-|C64|
-|GameBoy|
-|GBA|
-|Genesis|
-|MegaCD|
-|NeoGeo|
-|NES|
-|S32X|
-|SMS|
-|SNES|
-|TGFX16/CD|
-|PSX|
-
+| Core                     |
+| ------------------------ |
+| Amiga                    |
+| Atari 5200,7800,800,Lynx |
+| C64                      |
+| GameBoy                  |
+| GBA                      |
+| Genesis                  |
+| MegaCD                   |
+| NeoGeo                   |
+| NES                      |
+| S32X                     |
+| SMS                      |
+| SNES                     |
+| TGFX16/CD                |
+| PSX                      |
 
 Please report any bugs as an issue if you run into any.
-
 
 # Table of Contents
 
@@ -33,7 +30,7 @@ Please report any bugs as an issue if you run into any.
 - [Hardware Needed](#hardware-needed)
 - [Arduino Hardware Setup](#arduino-hardware-setup)
 - [Write Card Setup](#write-card-setup)
-- [MiSTer Setup](#mister-setup) 
+- [MiSTer Setup](#mister-setup)
   - [Manually Adding Cores](#manually-adding-cores-optional)
 - [Use](#use)
   - [Assigning Games to Cards](#assigning-games-to-cards)
@@ -110,7 +107,7 @@ As you are gathering numbers from your cards or RFID tags, choose an RFID device
 
 ## MiSTer Setup
 
-Copy `rfid_updater.sh` to `/media/fat/Scripts`. Boot your mister, and run `rfid_updater.sh` from the Scripts folder. Continue to [Use](#use) when this is done.
+Copy [rfid_updater.sh](https://github.com/ElRojo/MiSTerRFID/blob/main/fat/media/Scripts/rfid_updater.sh) to `/media/fat/Scripts`. Boot your mister, and run `rfid_updater.sh` from the Scripts folder. Continue to [Use](#use) when this is done.
 
 Note: If you use TTY2OLED, make sure you assign the right ttydev to the right device.
 
@@ -157,17 +154,17 @@ Relative to the games folder for the PSX core is: `Crash Bandicoot/Crash Bandico
 
 ## Use
 
-- After running `rfid_updater.sh`, making any changes, or uploading files to your MiSTer, power it down. 
-- Plug your Arduino into an available USB port on your USB board module and turn on your MiSTer. Depending on how many scripts you have running, it can take up to 30 seconds from first turning on the power to the RFID reader becoming available. 
+- After running [rfid_updater.sh](https://github.com/ElRojo/MiSTerRFID/blob/main/fat/media/Scripts/rfid_updater.sh), making any changes, or uploading files to your MiSTer, power it down.
+- Plug your Arduino into an available USB port on your USB board module and turn on your MiSTer. Depending on how many scripts you have running, it can take up to 30 seconds from first turning on the power to the RFID reader becoming available.
 - Once the RFID is available, you can start lunching games (if you added games to the `game_list.conf` file), or begin [Assigning Games to Cards](#Assigning-Games-to-Cards)
 
 Note: This can be combined with MisTer.ini option bootcore= to automatically launch an arcade core (MRA file) upon starting up your MisTer. The `rfid_process.sh` will run in the background waiting for a card to be presented.
 
 ## Assigning Games to Cards
 
-- Launch a game using the core menu. Once the game has booted, scan your `write card`. This will tell the Arduino that it needs to run the `rfid_write.sh` file on the next card scan. 
-- Scan a new (or already assigned) card. The card will be programaticaly added to `game_list.conf` and the next time you scan that card, it will boot the game. 
-- Remember that you cannot scan the same card twice, though. Scan a different card before scanning the just-written one in order to test it. 
+- Launch a game using the core menu. Once the game has booted, scan your `write card`. This will tell the Arduino that it needs to run the `rfid_write.sh` file on the next card scan.
+- Scan a new (or already assigned) card. The card will be programaticaly added to `game_list.conf` and the next time you scan that card, it will boot the game.
+- Remember that you cannot scan the same card twice, though. Scan a different card before scanning the just-written one in order to test it.
 
 _Cards can be overwritten. If you attempt to scan a card that is already added to the `game_list.conf` file, the entry will be deleted and then reassigned to the new game. You can do this as often as you'd like._
 
@@ -184,7 +181,6 @@ NeoGeo games must use the `.neo` extension. You cannot use a darksoft roll-up wi
 - If games aren't being added to the right spot, or being injected in odd places in `game_list.conf` make sure you respected the format into `game_list.conf`. Read [MiSTer Setup](#MiSTer-Setup).
 - If your write card doesn't function. Make sure you added the card number to the Arduino code **and** re-uploaded after making that change.
 
-
 ## Quick Start
 
 - Set up your Arduino and MFRC522 using: [Arduino Hardware Setup](#Arduino-Hardware-Setup)
@@ -192,7 +188,7 @@ NeoGeo games must use the `.neo` extension. You cannot use a darksoft roll-up wi
 - Pick a card to be the `write card`, scan it with the serial listener open, and jot down the number
 - Replace the value for `WRITE_TAG` in `arduino/misterrfid.ino` with your card number
 - Re-write to the arduino
-- Add `rfid_updater.sh` to Scripts folder and run it.
+- Add [rfid_updater.sh](https://github.com/ElRojo/MiSTerRFID/blob/main/fat/media/Scripts/rfid_updater.sh) to Scripts folder and run it.
 - Follow the [Use](#use) section
 
 ### THANK YOU
