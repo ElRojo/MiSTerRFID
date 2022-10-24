@@ -1,5 +1,7 @@
 #!/bin/bash
 #v1.0.2
+TXTBOLD=$(tput bold)
+TXTNORMAL=$(tput sgr0)
 CURL_RETRY="--connect-timeout 15 --max-time 600 --retry 3 --retry-delay 5"
 ALLOW_INSECURE_SSL="true"
 SCRIPT_PATH=/media/fat/Scripts/rfid_updater.sh
@@ -15,14 +17,14 @@ BRANCH="main"
 mister_rfid() {
     if [ -e "/media/fat/Scripts/rfid_util" ]; then
         DOWNLOADS=("${DOWNLOADS[@]:1}")
-        echo -e "Updating MiSTerRFID!\n"
+        echo -e "${TXTBOLD}Updating MiSTerRFID!${TXTNORMAL}\n"
         mv "$SCRIPTS_FOLDER"/rfid_util/rfid_write.sh "$SCRIPTS_FOLDER"/rfid_util/rfid_write.bak
         echo -e "A backup of rfid_write.sh has been created in\n${SCRIPTS_FOLDER}/rfid_util/rfid_write.bak\n"
         echo -e "############################################################\n"
         sleep 2
     else
         mkdir ""$SCRIPTS_FOLDER"/rfid_util"
-        echo -e "Installing MiSTerRFID!\n"
+        echo -e "${TXTBOLD}Installing MiSTerRFID!${TXTNORMAL}\n"
         echo -e "############################################################\n"
         sleep 2
     fi
@@ -68,13 +70,13 @@ curler() {
 }
 mister_log_enabler() {
     echo -e "\n############################################################"
-    echo "Enabling log_file_entry in MiSTer.ini"
+    echo "${TXTBOLD}Enabling log_file_entry in MiSTer.ini${TXTNORMAL}"
     echo -e "############################################################\n"
     sed -i "s/log_file_entry=0/log_file_entry=1/g" "/media/fat/MiSTer.ini"
     echo "Enabled in MiSTer.ini"
     if [ -e "/media/fat/MiSTer_alt_1.ini" ]; then
         echo -e "\n############################################################"
-        echo "Enabling log_file_entry in alt ini files."
+        echo "${TXTBOLD}Enabling log_file_entry in alt ini files.${TXTNORMAL}"
         echo -e "############################################################\n"
         for ((i = 1; i < 4; i++)); do
             if [ -e "/media/fat/MiSTer_alt_$i.ini" ]; then
@@ -87,7 +89,7 @@ mister_log_enabler() {
 }
 create_user_startup() {
     echo "############################################################"
-    echo "Creating user-startup.sh"
+    echo "${TXTBOLD}Creating user-startup.sh${TXTNORMAL}"
     echo "############################################################"
     touch ${USER_STARTUP}
     {
@@ -135,7 +137,7 @@ old_cleanup() {
 
 }
 
-echo -e "========================================================\n\nThanks for using MiSTer RFID!\nPlease report any bugs here:\nhttps://github.com/ElRojo/MiSTerRFID/issues\n\n========================================================\n"
+echo -e "========================================================\n\n${TXTBOLD}Thanks for using MiSTer RFID!${TXTNORMAL}\nPlease report any bugs here:\nhttps://github.com/ElRojo/MiSTerRFID/issues\n\n========================================================\n"
 sleep 2
 mister_rfid
 mister_log_enabler
