@@ -19,7 +19,7 @@ write_rom() {
   #=========================================#
 
   findIt() {
-    foundGame=$(find "$fullPathToCoreGamesDir" -name "$1*" -type f -print)
+    foundGame=$(find "$fullPathToCoreGamesDir" -name "$1*" -type f -print | grep -v ".mgl")
   }
 
   prepFinalPaths() {
@@ -130,6 +130,7 @@ write_rom() {
         if [[ "$(echo "$game" | grep -w "${neoGeoEnglish[$i]}")" ]]; then #This code pulled from https://github.com/mrchrisster/MiSTer_SAM/blob/main/MiSTer_SAM_on.sh. Awesome idea!
           neoGeoName="$i"
           findIt "$neoGeoName"
+	  break
         fi
       done
     }
@@ -186,7 +187,7 @@ write_rom() {
       esac
 
     }
-    if [[ ${1} = NEOGEO ]]; then
+    if [[ ${coreName} = NEOGEO ]]; then
       neoGeoFileFixer "$coreName"
     fi
 

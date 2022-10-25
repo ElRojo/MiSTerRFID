@@ -173,6 +173,7 @@ _Games cannot be assigned/added when booted from an MGL file. You must do this p
 ## Known Issues
 
 NeoGeo games must use the `.neo` extension. You cannot use a darksoft roll-up without converting to `.neo`. This is a limitation from `.mgl` files and how they load.
+Also, the files should be named after the abbreviated rom name, for example `mslugx.neo` (see `neoGeo_games.sh`).
 
 ## Troubleshooting
 
@@ -180,6 +181,7 @@ NeoGeo games must use the `.neo` extension. You cannot use a darksoft roll-up wi
 - If your cards don't seem to be scanning in MiSTer, make sure that `serial_listen.sh` actually started. I have had issues with that not booting in the past. Re-imaging my SD card takes care of this if nothing else.
 - If games aren't being added to the right spot, or being injected in odd places in `game_list.conf` make sure you respected the format into `game_list.conf`. Read [MiSTer Setup](#MiSTer-Setup).
 - If your write card doesn't function. Make sure you added the card number to the Arduino code **and** re-uploaded after making that change.
+- If your NeoGeo games are not stored on `fat` (stored for example on `usb0`), try moving the .mgl file into `/media/fat/games/NeoGeo/`, and adapt the `game_list.conf` file to this new path.
 
 ## Quick Start
 
