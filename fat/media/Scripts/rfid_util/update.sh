@@ -25,7 +25,7 @@ mister_rfid() {
         echo -e "############################################################\n"
         sleep 2
     else
-        mkdir ""$SCRIPTS_FOLDER"/rfid_util"
+        mkdir "$SCRIPTS_FOLDER"/rfid_util
         echo -e "${TXTBOLD}Installing MiSTerRFID!${TXTNORMAL}\n"
         echo -e "############################################################\n"
         sleep 2
