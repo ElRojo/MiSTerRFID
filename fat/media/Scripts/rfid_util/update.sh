@@ -17,7 +17,7 @@ LOGFILE=/media/fat/Scripts/rfid_util/rfid_log.txt
 BRANCH="main"
 
 mister_rfid() {
-    if [ -e "/media/fat/Scripts/rfid_util" ]; then
+    if [ -d "/media/fat/Scripts/rfid_util" ]; then
         DOWNLOADS=("${DOWNLOADS[@]:1}")
         echo -e "${TXTBOLD}Updating MiSTerRFID!${TXTNORMAL}\n"
         mv "$SCRIPTS_FOLDER"/rfid_util/rfid_write.sh "$SCRIPTS_FOLDER"/rfid_util/rfid_write.bak
