@@ -1,5 +1,5 @@
 #!/bin/bash
-#v1.0.4
+#v1.0.5
 TXTBOLD=$(tput bold)
 TCTBLINK=$(tput blink)
 TXTNORMAL=$(tput sgr0)
@@ -17,7 +17,7 @@ LOGFILE=/media/fat/Scripts/rfid_util/rfid_log.txt
 BRANCH="main"
 
 mister_rfid() {
-    if [ -d "/media/fat/Scripts/rfid_util" ]; then
+    if [ -e "/media/fat/Scripts/rfid_util/game_list.conf" ]; then
         DOWNLOADS=("${DOWNLOADS[@]:1}")
         echo -e "${TXTBOLD}Updating MiSTerRFID!${TXTNORMAL}\n"
         mv "$SCRIPTS_FOLDER"/rfid_util/rfid_write.sh "$SCRIPTS_FOLDER"/rfid_util/rfid_write.bak
@@ -25,7 +25,6 @@ mister_rfid() {
         echo -e "############################################################\n"
         sleep 2
     else
-        mkdir "$SCRIPTS_FOLDER"/rfid_util
         echo -e "${TXTBOLD}Installing MiSTerRFID!${TXTNORMAL}\n"
         echo -e "############################################################\n"
         sleep 2

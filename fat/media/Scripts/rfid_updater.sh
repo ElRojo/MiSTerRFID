@@ -43,6 +43,9 @@ case $? in
     exit 1
     ;;
 esac
+if [ ! -d /media/fat/Scripts/rfid_util ]; then
+    mkdir /media/fat/Scripts/rfid_util
+fi
 update_updater
 source /media/fat/Scripts/rfid_util/update.sh
 wait
