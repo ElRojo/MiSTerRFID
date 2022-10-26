@@ -7,6 +7,8 @@ write_rom() {
   #               Needed Vars               #
   #==========================================
   cardNumber="$1"
+  fileFailed=0
+  neoGeoName=""
   rootPath=/media/fat
   confFile=/media/fat/Scripts/rfid_util/game_list.conf
   coreName=$(cat /tmp/CORENAME)
@@ -139,7 +141,7 @@ write_rom() {
         done
         if [[ "$neoGeoName" = "" ]]; then
           echo ""$game" not found in neoGeo_games list!"
-          fileFailed="1"
+          fileFailed=1
         fi
       fi
     }
@@ -218,8 +220,8 @@ write_rom() {
 }
 
 write_rom "$1"
-if [[ ${fileFailed} = "1" ]]; then
+if [ ${fileFailed} = "1" ]; then
   mpg123 -q /media/fat/Scripts/rfid_util/err.mp3
-else
+elif [ ${fileFailed} = "0" ]; then
   mpg123 -q /media/fat/Scripts/rfid_util/rfid_write.mp3
 fi
