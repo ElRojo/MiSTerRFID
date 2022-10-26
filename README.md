@@ -107,7 +107,7 @@ As you are gathering numbers from your cards or RFID tags, choose an RFID device
 
 ## MiSTer Setup
 
-Copy [rfid_updater.sh](https://github.com/ElRojo/MiSTerRFID/blob/main/fat/media/Scripts/rfid_updater.sh) to `/media/fat/Scripts`. Boot your mister, and run `rfid_updater.sh` from the Scripts folder. Continue to [Use](#use) when this is done.
+Copy [rfid_updater.sh](https://github.com/ElRojo/MiSTerRFID/releases) from the Releases page to `/media/fat/Scripts`. Boot your mister, and run `rfid_updater.sh` from the Scripts folder. Continue to [Use](#use) when this is done.
 
 Note: If you use TTY2OLED, make sure you assign the right ttydev to the right device.
 
@@ -154,7 +154,7 @@ Relative to the games folder for the PSX core is: `Crash Bandicoot/Crash Bandico
 
 ## Use
 
-- After running [rfid_updater.sh](https://github.com/ElRojo/MiSTerRFID/blob/main/fat/media/Scripts/rfid_updater.sh), making any changes, or uploading files to your MiSTer, power it down.
+- After running [rfid_updater.sh](https://github.com/ElRojo/MiSTerRFID/releases), making any changes, or uploading files to your MiSTer, power it down.
 - Plug your Arduino into an available USB port on your USB board module and turn on your MiSTer. Depending on how many scripts you have running, it can take up to 30 seconds from first turning on the power to the RFID reader becoming available.
 - Once the RFID is available, you can start lunching games (if you added games to the `game_list.conf` file), or begin [Assigning Games to Cards](#Assigning-Games-to-Cards)
 
@@ -188,10 +188,10 @@ NeoGeo games must use the `.neo` extension. You cannot use a darksoft roll-up wi
 - Pick a card to be the `write card`, scan it with the serial listener open, and jot down the number
 - Replace the value for `WRITE_TAG` in `arduino/misterrfid.ino` with your card number
 - Re-write to the arduino
-- Add [rfid_updater.sh](https://github.com/ElRojo/MiSTerRFID/blob/main/fat/media/Scripts/rfid_updater.sh) to Scripts folder and run it.
+- Add [rfid_updater.sh](https://github.com/ElRojo/MiSTerRFID/releases) from the Releases page to Scripts folder and run it.
 - Follow the [Use](#use) section
 
 ### THANK YOU
 
 _Thanks to illusion-pasture-program and javiwwweb for the initial code and ideas._
-_Thanks to @[mrchrisster](https://github.com/mrchrisster) for their clarifications in the ReadMe and @[coded-with-claws](https://github.com/coded-with-claws) for their contribution for the new `rfid_process.sh` code!_
+_Thanks to @[mrchrisster](https://github.com/mrchrisster) for their clarifications in the ReadMe and @[coded-with-claws](https://github.com/coded-with-claws) for their code and testing contributions!_
