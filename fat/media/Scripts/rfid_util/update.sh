@@ -1,5 +1,5 @@
 #!/bin/bash
-#v1.0.5
+#v1.0.6
 TXTBOLD=$(tput bold)
 TCTBLINK=$(tput blink)
 TXTNORMAL=$(tput sgr0)
@@ -10,7 +10,7 @@ SCRIPT_PATH=/media/fat/Scripts/rfid_updater.sh
 SCRIPTS_FOLDER=/media/fat/Scripts
 SSL_SECURITY_OPTION=""
 UPDATER_DOWNLOAD=("rfid_updater.sh")
-DOWNLOADS=("game_list.conf" "neoGeo_games.sh" "rfid_write.mp3" "rfid_process.mp3" "write_tag.mp3" "rfid_process.sh" "rfid_write.sh" "serial_listen.sh")
+DOWNLOADS=("game_list.conf" "neoGeo_games.sh" "rfid_write.mp3" "rfid_process.mp3" "write_tag.mp3" "rfid_process.sh" "rfid_write.sh" "serial_listen.sh" "err.mp3")
 REPOSITORY_URL="https://raw.githubusercontent.com/ElRojo/MiSTerRFID"
 USER_STARTUP=/media/fat/linux/user-startup.sh
 LOGFILE=/media/fat/Scripts/rfid_util/rfid_log.txt
@@ -70,22 +70,29 @@ curler() {
         "$2"
 }
 mister_log_enabler() {
-    echo -e "\n############################################################"
-    echo "${TXTBOLD}Enabling log_file_entry in MiSTer.ini${TXTNORMAL}"
-    echo -e "############################################################\n"
-    sed -i "s/log_file_entry=0/log_file_entry=1/g" "/media/fat/MiSTer.ini"
-    echo -e "\033[2m- Enabled in MiSTer.ini\033[0m"
-    if [ -e "/media/fat/MiSTer_alt_1.ini" ]; then
+    if [ ! -e /media/fat/MiSTer.ini ]; then
+        echo "MiSTer.ini doesn't exist! Please create one and re-run the updater."
+        exit 1
+    else
         echo -e "\n############################################################"
-        echo "${TXTBOLD}Enabling log_file_entry in alt ini files.${TXTNORMAL}"
+        echo "${TXTBOLD}Enabling log_file_entry in MiSTer.ini${TXTNORMAL}"
         echo -e "############################################################\n"
-        for ((i = 1; i < 4; i++)); do
-            if [ -e "/media/fat/MiSTer_alt_$i.ini" ]; then
-                sed -i "s/log_file_entry=0/log_file_entry=1/g" "/media/fat/MiSTer_alt_$i.ini"
-                echo -e "\033[2m- Enabled in MiSTer_alt_$i.ini\033[0m"
-            fi
-        done
-        echo -e "\n############################################################\n"
+        if [ -e /media/fat/MiSTer.ini ]; then
+            sed -i "s/log_file_entry=0/log_file_entry=1/g" "/media/fat/MiSTer.ini"
+            echo -e "\033[2m- Enabled in MiSTer.ini\033[0m"
+        fi
+        if [ -e "/media/fat/MiSTer_alt_1.ini" ]; then
+            echo -e "\n############################################################"
+            echo "${TXTBOLD}Enabling log_file_entry in alt ini files.${TXTNORMAL}"
+            echo -e "############################################################\n"
+            for ((i = 1; i < 4; i++)); do
+                if [ -e "/media/fat/MiSTer_alt_$i.ini" ]; then
+                    sed -i "s/log_file_entry=0/log_file_entry=1/g" "/media/fat/MiSTer_alt_$i.ini"
+                    echo -e "\033[2m- Enabled in MiSTer_alt_$i.ini\033[0m"
+                fi
+            done
+            echo -e "\n############################################################\n"
+        fi
     fi
 }
 create_user_startup() {
