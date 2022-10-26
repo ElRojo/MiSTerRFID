@@ -3,13 +3,17 @@
 source /media/fat/Scripts/rfid_util/neoGeo_games.sh
 write_rom() {
 
-  #==========================================
+  #=========================================#
   #               Needed Vars               #
-  #==========================================
+  #=========================================#
+  #           Initialize Vars
   cardNumber="$1"
   fileFailed=0
   neoGeoName=""
   findItRan=""
+  hasExtension=""
+  extension=""
+  #=========================================#
   rootPath=/media/fat
   confFile=/media/fat/Scripts/rfid_util/game_list.conf
   coreName=$(cat /tmp/CORENAME)
@@ -163,6 +167,12 @@ write_rom() {
         esac ;;
       "GBA") case "$game" in
         *".gba") hasExtension="1" extension=".gba" ;;
+        *) hasExtension="0" ;;
+        esac ;;
+      "NES") case "$game" in
+        *".nes") hasExtension="1" extension=".nes" ;;
+        *".fds") hasExtension="1" extension=".fds" ;;
+        *".nsf") hasExtension="1" extension=".nsf" ;;
         *) hasExtension="0" ;;
         esac ;;
       "SGB") case "$game" in
