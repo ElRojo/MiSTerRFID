@@ -139,7 +139,7 @@ write_rom() {
         done
         if [[ "$neoGeoName" = "" ]]; then
           echo ""$game" not found in neoGeo_games list!"
-          mpg123 -q /media/fat/Scripts/rfid_util/err.mp3
+          fileFailed="1"
         fi
       fi
     }
@@ -218,4 +218,8 @@ write_rom() {
 }
 
 write_rom "$1"
-mpg123 -q /media/fat/Scripts/rfid_util/rfid_write.mp3
+if [[ ${fileFailed} = "1" ]]; then
+  mpg123 -q /media/fat/Scripts/rfid_util/err.mp3
+else
+  mpg123 -q /media/fat/Scripts/rfid_util/rfid_write.mp3
+fi
