@@ -9,6 +9,7 @@ write_rom() {
   cardNumber="$1"
   fileFailed=0
   neoGeoName=""
+  findItRan=""
   rootPath=/media/fat
   confFile=/media/fat/Scripts/rfid_util/game_list.conf
   coreName=$(cat /tmp/CORENAME)
