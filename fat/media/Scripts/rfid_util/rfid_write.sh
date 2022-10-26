@@ -194,7 +194,9 @@ write_rom() {
     }
 
     neoGeoFileFixer "$coreName"
-
+    if [ ${fileFailed} = "1" ]; then
+      return
+    fi
     extensionChecker "$coreName"
 
     findIt "$game"
@@ -216,8 +218,12 @@ write_rom() {
     writeArcade
 
   fi
-  sed -i "/$cardNumber/d" "$confFile"
-  sed -i "4i $cardNumber	echo load_core \"$sedPath\" > /dev/MiSTer_cmd" "$confFile"
+  if [ ${fileFailed} = "1" ]; then
+    break
+  else
+    sed -i "/$cardNumber/d" "$confFile"
+    sed -i "4i $cardNumber	echo load_core \"$sedPath\" > /dev/MiSTer_cmd" "$confFile"
+  fi
 }
 
 write_rom "$1"
