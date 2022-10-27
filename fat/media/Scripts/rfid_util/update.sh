@@ -1,5 +1,5 @@
 #!/bin/bash
-#v1.0.6
+#v1.0.7
 TXTBOLD=$(tput bold)
 TCTBLINK=$(tput blink)
 TXTNORMAL=$(tput sgr0)
@@ -96,9 +96,7 @@ mister_log_enabler() {
     fi
 }
 create_user_startup() {
-    echo "############################################################"
     echo "${TXTBOLD}Creating user-startup.sh${TXTNORMAL}"
-    echo "############################################################"
     touch ${USER_STARTUP}
     {
         echo '#!/bin/sh'
@@ -109,7 +107,10 @@ create_user_startup() {
 
 user_startup() {
     if [ ! -e ${USER_STARTUP} ]; then
-        echo -e "user-startup.sh not found.\n"
+    echo "############################################################"
+    echo "${TXTBOLD}Checking user-startup.sh...${TXTNORMAL}"
+    echo "############################################################"
+        echo -e "${TXTBOLD}user-startup.sh not found.\n${TXTNORMAL}"
         create_user_startup
     else
         userStartupLine=$(grep -n "screen -d -m -t rfid sh /media/fat/Scripts/rfid_util/serial_listen.sh" ${USER_STARTUP})
