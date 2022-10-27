@@ -2,6 +2,7 @@
 declare -A neoGeoEnglish=(
     ["3countb"]="3 Count Bout"
     ["2020bb"]="2020 Super Baseball"
+    ["2020bb"]="2020 Super Baseball (set 1)"
     ["2020bba"]="2020 Super Baseball (set 2)"
     ["2020bbh"]="2020 Super Baseball (set 3)"
     ["abyssal"]="Abyssal Infants"
@@ -94,6 +95,7 @@ declare -A neoGeoEnglish=(
     ["kof96h"]="The King of Fighters '96 (NGH-214)"
     ["kof97"]="The King of Fighters '97"
     ["kof97h"]="The King of Fighters '97 (NGH-2320)"
+    ["kof97h"]="The King of Fighters '97 (AES)"
     ["kof97k"]="The King of Fighters '97 (Korean release)"
     ["kof97oro"]="The King of Fighters '97 Chongchu Jianghu Plus 2003 (bootleg)"
     ["kof97pls"]="The King of Fighters '97 Plus"
