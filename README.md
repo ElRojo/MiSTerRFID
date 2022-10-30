@@ -163,7 +163,7 @@ Note: This can be combined with MisTer.ini option bootcore= to automatically lau
 ## Assigning Games to Cards
 
 - Launch a game using the core menu. Once the game has booted, scan your `write card`. This will tell the Arduino that it needs to run the `rfid_write.sh` file on the next card scan.
-- Scan a new (or already assigned) card. The card will be programatically added to `game_list.conf` and the next time you scan that card, it will boot the game.
+- Scan a new (or already assigned) card. The card will be programmatically added to `game_list.conf` and the next time you scan that card, it will boot the game.
 - Remember that you cannot scan the same card twice, though. Scan a different card before scanning the just-written one in order to test it.
 
 _Cards can be overwritten. If you attempt to scan a card that is already added to the `game_list.conf` file, the entry will be deleted and then reassigned to the new game. You can do this as often as you'd like._
