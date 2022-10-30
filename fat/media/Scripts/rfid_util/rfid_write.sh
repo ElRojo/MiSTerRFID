@@ -3,10 +3,17 @@
 source /media/fat/Scripts/rfid_util/neoGeo_games.sh
 write_rom() {
 
-  #==========================================
+  #=========================================#
   #               Needed Vars               #
-  #==========================================
+  #=========================================#
+  #           Initialize Vars
   cardNumber="$1"
+  fileFailed=0
+  neoGeoName=""
+  findItRan=""
+  hasExtension=""
+  extension=""
+  #=========================================#
   rootPath=/media/fat
   confFile=/media/fat/Scripts/rfid_util/game_list.conf
   coreName=$(cat /tmp/CORENAME)
@@ -19,7 +26,10 @@ write_rom() {
   #=========================================#
 
   findIt() {
-    foundGame=$(find "$fullPathToCoreGamesDir" -name "$1*" -type f -print)
+    if [[ $findItRan != "1" ]]; then
+      foundGame=$(find "$fullPathToCoreGamesDir" -name "$1*" -type f -print | grep -v ".mgl")
+      findItRan="1"
+    fi
   }
 
   prepFinalPaths() {
@@ -34,7 +44,7 @@ write_rom() {
 
     if [[ "$coreName" = NEOGEO ]]; then
       processedName="$neoGeoName"
-      sedPath="$fullPathToGameLocation".mgl 
+      sedPath="$fullPathToGameLocation".mgl
     else
       processedName=$(echo "$fullFoundGamePathNoExt" | awk -F "$coreName"/ '{printf $2}')
       sedPath="$fullFoundGamePathNoExt".mgl
@@ -58,47 +68,47 @@ write_rom() {
   prepareMgl() {
 
     extensionFinder() {
-      case $coreName in
-      "Genesis") case "$foundGame" in
-        *".bin"*) extension=".bin" ;;
-        *".gen"*) extension=".gen" ;;
-        *".md"*) extension=".md" ;;
-        esac ;;
-      "GAMEBOY") case "$foundGame" in
-        *".bin"*) extension=".bin" ;;
-        *".gbc"*) extension=".gbc" ;;
-        *".gb"*) extension=".gb" ;;
-        esac ;;
-      "GBA") case "$foundGame" in
-        *".gba"*) extension=".gba" ;;
-        esac ;;
-      "SGB") case "$foundGame" in
-        *".gbc"*) extension=".gbc" ;;
-        *".gb"*) extension=".gb" ;;
-        esac ;;
-      "SNES") case "$foundGame" in
-        *".sfc"*) extension=".sfc" ;;
-        *".smc"*) extension=".smc" ;;
-        *".bin"*) extension=".bin" ;;
-        *".bs"*) extension=".bs" ;;
-        *".spc"*) extension=".spc" ;;
-        *".zip"*) extension=".zip" ;;
-        esac ;;
-      "PSX") case "$foundGame" in
-        *".cue"*) extension=".cue" ;;
-        *".chd"*) extension=".chd" ;;
-        esac ;;
-      "MegaCD") case "$foundGame" in
-        *".cue"*) extension=".cue" ;;
-        *".chd"*) extension=".chd" ;;
-        esac ;;
-      *) case "$foundGame" in
-        *".srm"*) extension=".srm" ;;
-        *".neo"*) extension=".neo" ;;
-        *) extension="None Found!" ;;
-        esac ;;
-      *) extension="No core match!" ;;
-      esac
+      if [[ $hasExtension = "0" ]]; then
+        case $coreName in
+        "Genesis") case "$foundGame" in
+          *".bin"*) extension=".bin" ;;
+          *".gen"*) extension=".gen" ;;
+          *".md"*) extension=".md" ;;
+          esac ;;
+        "GAMEBOY") case "$foundGame" in
+          *".bin"*) extension=".bin" ;;
+          *".gbc"*) extension=".gbc" ;;
+          *".gb"*) extension=".gb" ;;
+          esac ;;
+        "GBA") case "$foundGame" in
+          *".gba"*) extension=".gba" ;;
+          esac ;;
+        "SGB") case "$foundGame" in
+          *".gbc"*) extension=".gbc" ;;
+          *".gb"*) extension=".gb" ;;
+          esac ;;
+        "SNES") case "$foundGame" in
+          *".sfc"*) extension=".sfc" ;;
+          *".smc"*) extension=".smc" ;;
+          *".bin"*) extension=".bin" ;;
+          *".bs"*) extension=".bs" ;;
+          *".spc"*) extension=".spc" ;;
+          *".zip"*) extension=".zip" ;;
+          esac ;;
+        "PSX") case "$foundGame" in
+          *".cue"*) extension=".cue" ;;
+          *".chd"*) extension=".chd" ;;
+          esac ;;
+        "MegaCD") case "$foundGame" in
+          *".cue"*) extension=".cue" ;;
+          *".chd"*) extension=".chd" ;;
+          esac ;;
+        "NEOGEO") extension=".neo" ;;
+        *) case "$foundGame" in
+          *) extension="No core or extension found!" ;;
+          esac ;;
+        esac
+      fi
     }
 
     mglPreparer() {
@@ -126,12 +136,19 @@ write_rom() {
     }
 
     neoGeoFileFixer() {
-      for i in "${!neoGeoEnglish[@]}"; do
-        if [[ "$(echo "$game" | grep -w "${neoGeoEnglish[$i]}")" ]]; then #This code pulled from https://github.com/mrchrisster/MiSTer_SAM/blob/main/MiSTer_SAM_on.sh. Awesome idea!
-          neoGeoName="$i"
-          findIt "$neoGeoName"
+      if [[ ${coreName} = NEOGEO ]]; then
+        for i in "${!neoGeoEnglish[@]}"; do
+          if [[ "$(echo "$game" | grep -x "${neoGeoEnglish[$i]}")" ]]; then #This code pulled from https://github.com/mrchrisster/MiSTer_SAM/blob/main/MiSTer_SAM_on.sh. Awesome idea!
+            neoGeoName="$i"
+            findIt "$neoGeoName"
+            break
+          fi
+        done
+        if [[ "$neoGeoName" = "" ]]; then
+          echo ""$game" not found in neoGeo_games list!"
+          fileFailed=1
         fi
-      done
+      fi
     }
 
     extensionChecker() {
@@ -150,6 +167,12 @@ write_rom() {
         esac ;;
       "GBA") case "$game" in
         *".gba") hasExtension="1" extension=".gba" ;;
+        *) hasExtension="0" ;;
+        esac ;;
+      "NES") case "$game" in
+        *".nes") hasExtension="1" extension=".nes" ;;
+        *".fds") hasExtension="1" extension=".fds" ;;
+        *".nsf") hasExtension="1" extension=".nsf" ;;
         *) hasExtension="0" ;;
         esac ;;
       "SGB") case "$game" in
@@ -176,27 +199,19 @@ write_rom() {
         *".chd") hasExtension="1" extension=".chd" ;;
         *) hasExtension="0" ;;
         esac ;;
-      *) case "$game" in
-        *".srm") hasExtension="1" extension=".srm" ;;
-        *".neo") hasExtension="1" extension=".neo" ;;
-        *) hasExtension="0" ;;
-        esac ;;
-      *) hasExtension="No core match!" ;;
       *) hasExtension="0" ;;
       esac
-
     }
-    if [[ ${1} = NEOGEO ]]; then
-      neoGeoFileFixer "$coreName"
-    fi
 
+    neoGeoFileFixer "$coreName"
+    if [ ${fileFailed} = "1" ]; then
+      return
+    fi
     extensionChecker "$coreName"
 
     findIt "$game"
 
-    if [[ "$hasExtension" = "0" ]]; then
-      extensionFinder "$coreName"
-    fi
+    extensionFinder "$coreName"
 
     mglPreparer "$coreName"
 
@@ -213,9 +228,17 @@ write_rom() {
     writeArcade
 
   fi
-  sed -i "/$cardNumber/d" "$confFile"
-  sed -i "4i $cardNumber	echo load_core \"$sedPath\" > /dev/MiSTer_cmd" "$confFile"
+  if [ ${fileFailed} = "1" ]; then
+    break
+  else
+    sed -i "/$cardNumber/d" "$confFile"
+    sed -i "4i $cardNumber	echo load_core \"$sedPath\" > /dev/MiSTer_cmd" "$confFile"
+  fi
 }
 
 write_rom "$1"
-mpg123 -q /media/fat/Scripts/rfid_util/rfid_write.mp3
+if [ ${fileFailed} = "1" ]; then
+  mpg123 -q /media/fat/Scripts/rfid_util/err.mp3
+elif [ ${fileFailed} = "0" ]; then
+  mpg123 -q /media/fat/Scripts/rfid_util/rfid_write.mp3
+fi
