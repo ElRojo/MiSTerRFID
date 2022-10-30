@@ -3,7 +3,6 @@
 Forked from: [javiwwweb/MisTerRFID](https://github.com/javiwwweb/MisTerRFID)
 Most of the ReadMe below is copy/paste from javiwwweb. I have added some notes for my changes.
 
-
 Below are the currently supported cores:
 
 | Core                     |
@@ -24,7 +23,6 @@ Below are the currently supported cores:
 | PSX                      |
 
 Please report any bugs as an issue if you run into any.
-
 
 # Table of Contents
 
@@ -182,7 +180,6 @@ NeoGeo games must use the `.neo` extension. You cannot use a darksoft roll-up wi
 - If your cards don't seem to be scanning in MiSTer, make sure that `serial_listen.sh` actually started. I have had issues with that not booting in the past. Re-imaging my SD card takes care of this if nothing else.
 - If games aren't being added to the right spot, or being injected in odd places in `game_list.conf` make sure you respected the format into `game_list.conf`. Read [MiSTer Setup](#MiSTer-Setup).
 - If your write card doesn't function, make sure you added the card number to the Arduino code **and** re-uploaded after making that change.
-
 
 ## Quick Start
 
