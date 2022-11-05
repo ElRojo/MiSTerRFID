@@ -229,7 +229,7 @@ write_rom() {
 
   fi
   if [ ${fileFailed} = "1" ]; then
-    break
+    return
   else
     sed -i "/$cardNumber/d" "$confFile"
     sed -i "4i $cardNumber	echo load_core \"$sedPath\" > /dev/MiSTer_cmd" "$confFile"
