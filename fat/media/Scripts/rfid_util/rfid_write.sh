@@ -208,7 +208,6 @@ write_rom() {
       echo "<mistergamedescription><rbf>"$rbfFile"</rbf><file delay=\"2\" type=\"$mountType\" index=\"$indexVal\" path=\""$2"\"/></mistergamedescription>" >"$1"
     }
 
-    #picks a game out of list in case of multiple found results
     if [[ "$hasExtension" = "0" ]]; then
       fullFoundGamePath=$(echo "$foundGame" | grep -m 1 "$extension")
     else
