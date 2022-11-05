@@ -6,7 +6,8 @@ write_rom() {
   #=========================================#
   #               Needed Vars               #
   #=========================================#
-  #           Initialize Vars
+  #           Initialize Vars               #
+  #=========================================#
   cardNumber="$1"
   fileFailed=0
   neoGeoName=""
@@ -25,47 +26,29 @@ write_rom() {
   rbfFile=_$(cat /tmp/STARTPATH | awk -F _ '{printf $2}')
   #=========================================#
 
-  findIt() {
-    if [[ $findItRan != "1" ]]; then
-      foundGame=$(find "$fullPathToCoreGamesDir" -name "$1*" -type f -print | grep -v ".mgl")
-      findItRan="1"
-    fi
-  }
-
-  prepFinalPaths() {
-    #picks a game out of list in case of multiple found results
-    if [[ "$hasExtension" = "0" ]]; then
-      fullFoundGamePath=$(echo "$foundGame" | grep -m 1 "$extension")
-    else
-      fullFoundGamePath="$fullPathToGameLocation"
-    fi
-
-    fullFoundGamePathNoExt="${fullFoundGamePath%.*}"
-
-    if [[ "$coreName" = NEOGEO ]]; then
-      processedName="$neoGeoName"
-      sedPath="$fullPathToGameLocation".mgl
-    else
-      processedName=$(echo "$fullFoundGamePathNoExt" | awk -F "$coreName"/ '{printf $2}')
-      sedPath="$fullFoundGamePathNoExt".mgl
-    fi
-
-    relativeGameDir="$processedName""$extension"
-
-    writeMgl "$sedPath" "$relativeGameDir"
-  }
-
-  writeMgl() {
-    if [ ! -f "$1" ]; then
-      echo "<mistergamedescription><rbf>"$rbfFile"</rbf><file delay=\"2\" type=\"$mountType\" index=\"$indexVal\" path=\""$2"\"/></mistergamedescription>" >"$1"
-    fi
-  }
-
   writeArcade() {
     sedPath="$startPath"
   }
 
+  processDecider() {
+    if [[ ${startPath} = *".mgl" ]]; then
+      return
+    fi
+    if [[ ${fullPath} != *_Arcade* ]]; then
+      prepareMgl
+    elif [[ ${fullPath} = *_Arcade* ]]; then
+      writeArcade
+    fi
+  }
+
   prepareMgl() {
+
+    findIt() {
+      if [[ $findItRan != "1" ]]; then
+        foundGame=$(find "$fullPathToCoreGamesDir" -name "$1*" -type f -print | grep -v ".mgl")
+        findItRan="1"
+      fi
+    }
 
     extensionFinder() {
       if [[ $hasExtension = "0" ]]; then
@@ -111,6 +94,22 @@ write_rom() {
       fi
     }
 
+    neoGeoFileFixer() {
+      if [[ ${coreName} = NEOGEO ]]; then
+        for i in "${!neoGeoEnglish[@]}"; do
+          if [[ "$(echo "$game" | grep -x "${neoGeoEnglish[$i]}")" ]]; then #This code pulled from https://github.com/mrchrisster/MiSTer_SAM/blob/main/MiSTer_SAM_on.sh. Awesome idea!
+            neoGeoName="$i"
+            findIt "$neoGeoName"
+            break
+          fi
+        done
+        if [[ "$neoGeoName" = "" ]]; then
+          echo ""$game" not found in neoGeo_games list!"
+          fileFailed=1
+        fi
+      fi
+    }
+
     mglPreparer() {
       case $coreName in
       "Amiga") mountType="f" indexVal=0 ;;
@@ -133,22 +132,6 @@ write_rom() {
       "PSX") mountType="s" indexVal=1 ;;
       *) mountType="f" indexVal=0 ;;
       esac
-    }
-
-    neoGeoFileFixer() {
-      if [[ ${coreName} = NEOGEO ]]; then
-        for i in "${!neoGeoEnglish[@]}"; do
-          if [[ "$(echo "$game" | grep -x "${neoGeoEnglish[$i]}")" ]]; then #This code pulled from https://github.com/mrchrisster/MiSTer_SAM/blob/main/MiSTer_SAM_on.sh. Awesome idea!
-            neoGeoName="$i"
-            findIt "$neoGeoName"
-            break
-          fi
-        done
-        if [[ "$neoGeoName" = "" ]]; then
-          echo ""$game" not found in neoGeo_games list!"
-          fileFailed=1
-        fi
-      fi
     }
 
     extensionChecker() {
@@ -219,21 +202,43 @@ write_rom() {
 
   }
 
-  if [[ ${startPath} = *".mgl" ]]; then
-    return
-  fi
-  if [[ ${fullPath} != *_Arcade* ]]; then
-    prepareMgl
-  elif [[ ${fullPath} = *_Arcade* ]]; then
-    writeArcade
+  prepFinalPaths() {
 
-  fi
+    writeMgl() {
+      echo "<mistergamedescription><rbf>"$rbfFile"</rbf><file delay=\"2\" type=\"$mountType\" index=\"$indexVal\" path=\""$2"\"/></mistergamedescription>" >"$1"
+    }
+
+    #picks a game out of list in case of multiple found results
+    if [[ "$hasExtension" = "0" ]]; then
+      fullFoundGamePath=$(echo "$foundGame" | grep -m 1 "$extension")
+    else
+      fullFoundGamePath="$fullPathToGameLocation"
+    fi
+
+    fullFoundGamePathNoExt="${fullFoundGamePath%.*}"
+
+    if [[ "$coreName" = NEOGEO ]]; then
+      processedName="$neoGeoName"
+      sedPath="$fullPathToGameLocation".mgl
+    else
+      processedName=$(echo "$fullFoundGamePathNoExt" | awk -F "$coreName"/ '{printf $2}')
+      sedPath="$fullFoundGamePathNoExt".mgl
+    fi
+
+    relativeGameDir="$processedName""$extension"
+
+    writeMgl "$sedPath" "$relativeGameDir"
+  }
+
+  processDecider
+
   if [ ${fileFailed} = "1" ]; then
     break
   else
     sed -i "/$cardNumber/d" "$confFile"
     sed -i "4i $cardNumber	echo load_core \"$sedPath\" > /dev/MiSTer_cmd" "$confFile"
   fi
+
 }
 
 write_rom "$1"
