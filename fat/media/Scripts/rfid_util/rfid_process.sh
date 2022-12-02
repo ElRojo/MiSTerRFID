@@ -18,5 +18,9 @@ fi
 
 echo "Running: $gamefound"
 mpg123 -q /media/fat/Scripts/rfid_util/rfid_process.mp3
+sam="/media/fat/Scripts/MiSTer_SAM_on.sh"
+if [[ "$(ps -o pid,args | grep '[M]iSTer_SAM_on.sh')" ]]; then
+	"${sam}" playcurrent
+fi
 eval "$gamefound"
 ##
