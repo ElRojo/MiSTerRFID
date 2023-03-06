@@ -1,5 +1,6 @@
 #!/bin/bash
-#v1.0.7
+#v1.1
+declare -a iniArr
 TXTBOLD=$(tput bold)
 TCTBLINK=$(tput blink)
 TXTNORMAL=$(tput sgr0)
@@ -69,32 +70,29 @@ curler() {
         -o "$1" \
         "$2"
 }
-mister_log_enabler() {
-    if [ ! -e /media/fat/MiSTer.ini ]; then
-        echo "MiSTer.ini doesn't exist! Please create one and re-run the updater."
-        exit 1
-    else
-        echo -e "\n############################################################"
-        echo "${TXTBOLD}Enabling log_file_entry in MiSTer.ini${TXTNORMAL}"
-        echo -e "############################################################\n"
-        if [ -e /media/fat/MiSTer.ini ]; then
-            sed -i "s/log_file_entry=0/log_file_entry=1/g" "/media/fat/MiSTer.ini"
-            echo -e "\033[2m- Enabled in MiSTer.ini\033[0m"
-        fi
-        if [ -e "/media/fat/MiSTer_alt_1.ini" ]; then
-            echo -e "\n############################################################"
-            echo "${TXTBOLD}Enabling log_file_entry in alt ini files.${TXTNORMAL}"
-            echo -e "############################################################\n"
-            for ((i = 1; i < 4; i++)); do
-                if [ -e "/media/fat/MiSTer_alt_$i.ini" ]; then
-                    sed -i "s/log_file_entry=0/log_file_entry=1/g" "/media/fat/MiSTer_alt_$i.ini"
-                    echo -e "\033[2m- Enabled in MiSTer_alt_$i.ini\033[0m"
-                fi
-            done
-            echo -e "\n############################################################\n"
-        fi
-    fi
+get_config_files() {
+    for configFile in "/media/fat/*.ini"; do
+        iniArr=("${configFiles[@]}" "$configFile")
+    done
 }
+mister_log_enabler() {
+
+    echo -e "\n############################################################"
+    echo "${TXTBOLD}Enabling log_file_entry in configuration file(s)${TXTNORMAL}"
+    echo -e "############################################################\n"
+    for configFile in ${iniArr[@]}; do
+        logFileStringChk=$(grep -n "log_file_entry" ${configFile})
+        if [[ ! $logFileStringChk ]]; then
+            echo -e "\033[2m- $(basename ${configFile}) is not a config file. Skipping...\033[0m"
+        else
+            sed -i "s/log_file_entry=0/log_file_entry=1/g" ${configFile}
+            echo -e "\033[2m- Enabled in $(basename ${configFile})\033[0m"
+        fi
+    done
+    echo -e "\n############################################################\n"
+
+}
+
 create_user_startup() {
     echo "${TXTBOLD}Creating user-startup.sh${TXTNORMAL}"
     touch ${USER_STARTUP}
@@ -107,9 +105,9 @@ create_user_startup() {
 
 user_startup() {
     if [ ! -e ${USER_STARTUP} ]; then
-    echo "############################################################"
-    echo "${TXTBOLD}Checking user-startup.sh...${TXTNORMAL}"
-    echo "############################################################"
+        echo "############################################################"
+        echo "${TXTBOLD}Checking user-startup.sh...${TXTNORMAL}"
+        echo "############################################################"
         echo -e "${TXTBOLD}user-startup.sh not found.\n${TXTNORMAL}"
         create_user_startup
     else
@@ -149,6 +147,7 @@ old_cleanup() {
 echo -e "========================================================\n\n${TXTBOLD}Thanks for using MiSTer RFID!${TXTNORMAL}\nPlease report any bugs here:\n${TXTUNDERLINE}https://github.com/ElRojo/MiSTerRFID/issues${TXTNORMAL}\n\n========================================================\n"
 sleep 2
 mister_rfid
+get_config_files
 mister_log_enabler
 user_startup
 old_cleanup
