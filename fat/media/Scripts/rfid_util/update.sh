@@ -1,5 +1,5 @@
 #!/bin/bash
-#v1.0.7
+#v1.1
 declare -a iniArr
 TXTBOLD=$(tput bold)
 TCTBLINK=$(tput blink)
