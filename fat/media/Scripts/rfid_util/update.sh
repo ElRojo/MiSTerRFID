@@ -83,7 +83,7 @@ mister_log_enabler() {
     for configFile in ${iniArr[@]}; do
         logFileStringChk=$(grep -n "log_file_entry" ${configFile})
         if [[ ! $logFileStringChk ]]; then
-            echo -e "\033[2m- ${configFile} is not a config file. Skipping...\033[0m"
+            echo -e "\033[2m- $(basename ${configFile}) is not a config file. Skipping...\033[0m"
         else
             sed -i "s/log_file_entry=0/log_file_entry=1/g" ${configFile}
             echo -e "\033[2m- Enabled in $(basename ${configFile})\033[0m"
