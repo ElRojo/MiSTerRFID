@@ -76,12 +76,18 @@ get_config_files() {
     done
 }
 mister_log_enabler() {
+
     echo -e "\n############################################################"
     echo "${TXTBOLD}Enabling log_file_entry in configuration file(s)${TXTNORMAL}"
     echo -e "############################################################\n"
     for configFile in ${iniArr[@]}; do
-        sed -i "s/log_file_entry=0/log_file_entry=1/g" "$configFile"
-        echo -e "\033[2m- Enabled in $(basename $configFile)\033[0m"
+        logFileStringChk=$(grep -n "log_file_entry" ${configFile})
+        if [[ ! $logFileStringChk ]]; then
+            echo "${configFile} is not a config file"
+        else
+            sed -i "s/log_file_entry=0/log_file_entry=1/g" ${configFile}
+            echo -e "\033[2m- Enabled in $(basename ${configFile})\033[0m"
+        fi
     done
     echo -e "\n############################################################\n"
 
